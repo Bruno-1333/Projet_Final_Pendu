@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Projet_Final_Pendu"
         tools:targetApi="31">
         <activity
-            android:name=".MenuJeuActivity"
+            android:name=".PanneauJeuActivity"
             android:exported="false" />
         <activity
             android:name=".EnregistrerUtilisateurActivity"

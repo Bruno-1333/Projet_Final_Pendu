@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityMainBinding
-import com.brunoleonardo.projet_final_pendu.databinding.ActivityMenuJeuBinding
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = if (utilisateur.isAdministrateur) {
                     Intent(this, AdminActivity::class.java)
                 } else {
-                    Intent(this, ActivityMenuJeuBinding::class.java)
+                    Intent(this, PanneauJeuActivity::class.java)
                 }
                 startActivity(intent)
             } else {
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnJouerLogin.setOnClickListener {
-            val intent = Intent(this, ActivityMenuJeuBinding::class.java)
+            val intent = Intent(this, PanneauJeuActivity::class.java)
             startActivity(intent)
         }
 
@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     data class Utilisateur(val id: Int, val nom: String, val nomUtilisateur: String, val motDePasse: String, val isAdministrateur: Boolean)
 }
+
 
 
 

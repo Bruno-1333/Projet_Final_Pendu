@@ -10,15 +10,12 @@
     <string name="btnEnregistrerUtilisateurLogin">Enregistrer</string>
 
 
-
     // Activity Menu Jeu
     <string name="txtBienvenue">Bienvenue au jeu du pendu! Choisissez un theme et votre niveau de difficulte. Bonne chance!</string>
     <string name="radioBtnFacile">Facile</string>
     <string name="radioBtnMoyen">Moyen</string>
     <string name="radioBtnDifficile">Difficile</string>
     <string name="btnJouer">Jouer</string>
-
-
 
 
 </resources>

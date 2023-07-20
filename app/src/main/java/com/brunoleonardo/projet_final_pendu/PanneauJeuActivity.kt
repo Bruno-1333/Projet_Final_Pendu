@@ -4,14 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.brunoleonardo.projet_final_pendu.databinding.ActivityMenuJeuBinding
+import com.brunoleonardo.projet_final_pendu.databinding.ActivityPanneauJeuBinding
 
-class SelectionActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMenuJeuBinding
+class PanneauJeuActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityPanneauJeuBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMenuJeuBinding.inflate(layoutInflater)
+        binding = ActivityPanneauJeuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var themeChoisi = ""
@@ -20,7 +20,6 @@ class SelectionActivity : AppCompatActivity() {
         binding.imgBtnAnimaux.setOnClickListener {
             themeChoisi = "Animal"
             // Você pode querer alterar a aparência do ImageButton para indicar que ele foi selecionado
-
         }
 
         binding.imgBtnPays.setOnClickListener {
@@ -29,12 +28,12 @@ class SelectionActivity : AppCompatActivity() {
         }
 
         binding.imgBtnInstumentsMusique.setOnClickListener {
-            themeChoisi = "Pays"
+            themeChoisi = "Musique"
             // Alterar a aparência do ImageButton, se necessário
         }
 
         binding.imgBtnVoitures.setOnClickListener {
-            themeChoisi = "Pays"
+            themeChoisi = "Voitures"
             // Alterar a aparência do ImageButton, se necessário
         }
 
@@ -63,5 +62,5 @@ class SelectionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Veuillez sélectionner un thème et un niveau de difficulté.", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+}
 }
