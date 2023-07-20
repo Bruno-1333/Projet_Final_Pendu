@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/txtUtilisateurLogin"
+        android:layout_width="302dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtMotPasseLogin"
+        android:layout_width="298dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUtilisateurLogin" />
+    <Button
+        android:id="@+id/btnEnregistrerUtilisateurLogin"
+        android:layout_width="245dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="83dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnJouerLogin" />
+
+    <Button
+        android:id="@+id/btnJouerLogin"
+        android:layout_width="245dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="83dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEntrerLogin" />
+
+    <Button
+        android:id="@+id/btnEntrerLogin"
+        android:layout_width="245dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="83dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMotPasseLogin" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
