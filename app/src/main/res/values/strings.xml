@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Projet_Final_Pendu</string>
+
+    // Main Activity
+    <string name="titre">Jeu du Pendu</string>
+    <string name="txtUtilisateurLogin">Utilisateur</string>
+    <string name="txtMotPasseLogin">Mot de passe</string>
+    <string name="btnEntrerLogin">Entrer</string>
+    <string name="btnJouerLogin">Jouer</string>
+    <string name="btnEnregistrerUtilisateurLogin">Enregistrer</string>
+
+
+
+    // Activity Menu Jeu
+    <string name="txtBienvenue">Bienvenue au jeu du pendu! Choisissez un theme et votre niveau de difficulte. Bonne chance!</string>
+    <string name="radioBtnFacile">Facile</string>
+    <string name="radioBtnMoyen">Moyen</string>
+    <string name="radioBtnDifficile">Difficile</string>
+    <string name="btnJouer">Jouer</string>
+
+
+
+
 </resources>
