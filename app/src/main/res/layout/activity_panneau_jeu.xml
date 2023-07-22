@@ -31,15 +31,15 @@
 
             <ImageButton
                 android:id="@+id/imgBtnAnimaux"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
                 android:layout_weight="1"
                 tools:src="@tools:sample/avatars" />
 
             <ImageButton
                 android:id="@+id/imgBtnPays"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
                 android:layout_weight="1"
                 android:cropToPadding="false"
                 android:scaleType="center"
@@ -54,15 +54,15 @@
 
             <ImageButton
                 android:id="@+id/imgBtnInstumentsMusique"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
                 android:layout_weight="1"
                 tools:src="@tools:sample/avatars" />
 
             <ImageButton
                 android:id="@+id/imgBtnVoitures"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
                 android:layout_weight="1"
                 tools:src="@tools:sample/avatars" />
 
