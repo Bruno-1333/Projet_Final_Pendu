@@ -8,7 +8,8 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityJeuBinding
 
 class JeuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJeuBinding
-    private lateinit var letterViews: List<TextView>
+    private lateinit var vuesLettres: List<TextView>
+    private val lettresIncorrectes = mutableListOf<Char>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,14 +18,14 @@ class JeuActivity : AppCompatActivity() {
 
         // Récupération des données de l'activité précédente (PanneauJeuActivity)
         val theme = intent.getStringExtra("theme")
-        val difficulty = intent.getStringExtra("difficulte")
+        val difficulte = intent.getStringExtra("difficulte")
 
         // Aqui você deve consultar o banco de dados e buscar uma palavra baseada no tema e na dificuldade
         // Suponha que essa seja a palavra a ser adivinhada
         val mot = "ANIMAUX" // substituir por um comando de busca no banco de dados
 
         // Mantenha uma lista das TextViews
-        letterViews = mot.map { letter ->
+        vuesLettres = mot.map { lettre ->
             TextView(this).apply {
                 text = "_"
                 textSize = 24f
@@ -34,22 +35,28 @@ class JeuActivity : AppCompatActivity() {
 
         // Adicione as TextViews ao LinearLayout
         val motLayout = findViewById<LinearLayout>(R.id.motLayout)
-        letterViews.forEach { textView ->
+        vuesLettres.forEach { textView ->
             motLayout.addView(textView)
         }
 
         // Quando o botão Adivinhar for clicado
         binding.btnGuess.setOnClickListener {
-            val letter = binding.txtSaissir.text.firstOrNull()
-            letter?.let { guessLetter(it, mot) }
+            val lettre = binding.txtSaissir.text.toString().firstOrNull()
+            lettre?.let {
+                if (mot.contains(it, true)) {
+                    devinerLettre(it, mot)
+                } else {
+                    devinerIncorrect(it)
+                }
+            }
         }
     }
 
     // Quando uma letra é adivinhada corretamente, substitua o "_" correspondente
-    fun guessLetter(letter: Char, mot: String) {
-        val indices = mot.indices.filter { mot[it] == letter }  // Isso retorna os índices de 'letter' em 'word'
+    fun devinerLettre(lettre: Char, mot: String) {
+        val indices = mot.indices.filter { mot[it].toLowerCase() == lettre.toLowerCase() }  // Isso retorna os índices de 'lettre' em 'mot'
         indices.forEach { index ->
-            letterViews[index].text = letter.toString()
+            vuesLettres[index].text = lettre.toString()
         }
 
         // Aqui você pode verificar se a palavra foi completamente adivinhada
@@ -59,8 +66,34 @@ class JeuActivity : AppCompatActivity() {
         binding.txtSaissir.text.clear()
     }
 
-    // Você também precisa implementar uma função para lidar com palpites errados
-    // Nessa função, você pode adicionar a letra errada a uma lista de letras erradas,
-    // incrementar o contador de tentativas e atualizar a imagem correspondente.
-    // Se o usuário atingir o número máximo de tentativas, você deve gravar no banco de dados que o usuário perdeu
+    // Quando uma letra é adivinhada incorretamente
+    fun devinerIncorrect(lettre: Char) {
+        lettresIncorrectes.add(lettre)
+        binding.textView3.text = lettresIncorrectes.joinToString(" ")
+        miseAJourImage(lettresIncorrectes.size)
+        if (lettresIncorrectes.size >= 10) {
+            // l'utilisateur a perdu le jeu, enregistrez dans la base de données et faites une action
+        }
+    }
+
+    fun miseAJourImage(tentatives: Int) {
+        // Met à jour l'image en fonction du nombre de tentatives
+        val ressourceImage = when (tentatives) {
+            1 -> R.drawable.img_01
+            2 -> R.drawable.img_02
+            3 -> R.drawable.img_03
+            4 -> R.drawable.img_04
+            5 -> R.drawable.img_05
+            6 -> R.drawable.img_06
+            7 -> R.drawable.img_07
+            8 -> R.drawable.img_08
+            9 -> R.drawable.img_09
+            10 -> R.drawable.img_10
+            // ... ajoutez plus de cas si nécessaire
+            else -> R.drawable.img_default
+        }
+        binding.imageView.setImageResource(ressourceImage)
+    }
 }
+
+
