@@ -17,5 +17,14 @@
     <string name="radioBtnDifficile">Difficile</string>
     <string name="btnJouer">Jouer</string>
 
+    // Activity Jeu
+    <string name="txtDescription">Description du Mot</string>
+    <string name="txtChronometre">Chronometre</string>
+    <string name="txtMauvaisMot">Mauvais Mot</string>
+    <string name="txtSaissirLettre">Saissir une lettre</string>
+    <string name="btnEssayer">Essayer</string>
+    <string name="btnRejouer">Rejouer</string>
+
+
 
 </resources>

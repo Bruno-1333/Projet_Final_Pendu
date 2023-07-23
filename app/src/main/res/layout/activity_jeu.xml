@@ -16,16 +16,16 @@
 
         <TextView
             android:id="@+id/txtDescription"
-            android:layout_width="333dp"
+            android:layout_width="324dp"
             android:layout_height="41dp"
-            android:text="TextView" />
+            android:text="@string/txtDescription" />
 
         <TextView
             android:id="@+id/txtChronometre"
             android:layout_width="wrap_content"
             android:layout_height="41dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/txtChronometre" />
 
     </LinearLayout>
 
@@ -47,26 +47,28 @@
         android:id="@+id/txtMauvaisMot"
         android:layout_width="match_parent"
         android:layout_height="79dp"
-        android:text="TextView" />
+        android:text="@string/txtMauvaisMot" />
 
     <EditText
         android:id="@+id/txtSaissirLettre"
         android:layout_width="match_parent"
         android:layout_height="63dp"
         android:ems="10"
+        android:hint="SaissirLettre"
         android:inputType="text"
-        android:text="Name" />
+        android:maxLength="1" />
 
     <Button
-        android:id="@+id/btnGuess"
+        android:id="@+id/btnEssayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/btnEssayer" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnRejouer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:onClick="@string/btnRejouer"
+        android:text="@string/btnRejouer" />
 
 </LinearLayout>
