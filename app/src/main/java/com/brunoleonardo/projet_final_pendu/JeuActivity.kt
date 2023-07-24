@@ -14,9 +14,7 @@ import java.util.Locale
 
 class JeuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJeuBinding
-    private lateinit var vuesLettres: List<TextView>
-    private val lettresIncorrectes = mutableListOf<Char>()
-
+    private lateinit var jeu: Jeu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,145 +25,125 @@ class JeuActivity : AppCompatActivity() {
         val theme = intent.getStringExtra("theme")
         val difficulte = intent.getStringExtra("difficulte")
 
-        Log.d("JeuActivity", "Theme: $theme, Difficulty: $difficulte")
+        // Créer un nouveau jeu
+        val utilisateur = intent.getSerializableExtra("utilisateur") as Utilisateur
 
+        // Aqui você precisa definir a palavra e a descrição baseadas no tema e dificuldade
+        val mot = choisirMot(theme, difficulte) // buscar ou gerar a palavra baseada no tema e dificuldade
+        val description = "descripcion_exemple" // buscar ou gerar a descrição baseada no tema e dificuldade
 
-        // Baseado na dificuldade escolhida, escolha uma palavra para adivinhar
-        val mot: String = when (difficulte?.trim()?.toLowerCase(Locale.ROOT)) {
-            "facile" -> /* realizar query para palavra de 5 letras baseada no tema */
-                "LAPIN"  // substituir por um comando de busca no banco de dados
-            "moyen" -> /* realizar query para palavra de 6 letras baseada no tema */
-                "GIRAFE"  // substituir por um comando de busca no banco de dados
-            "difficile" -> /* realizar query para palavra de 7 letras baseada no tema */
-                "POISSON"  // substituir por um comando de busca no banco de dados
-            else -> "ANIMAUX" // padrão caso nada seja passado
-        }
+        jeu = Jeu(utilisateur, theme ?: "defaultTheme", mot, description, difficulte ?: "defaultDifficulte")
 
-        val description = "Ceci est une description de la parole." // substituir por um comando de busca no banco de dados
-        binding.txtDescription.text = description
+        binding.txtDescription.text = jeu.description
 
-        // Mantenha uma lista das TextViews
-        vuesLettres = mot.map { lettre ->
-            TextView(this).apply {
-                text = "_"
-                textSize = 24f
-                setPadding(8, 0, 8, 0)  // Adicione algum padding para espaçar as letras
-            }
-        }
+        creerVuesLettres()
 
-
-
-        // Adicione as TextViews ao LinearLayout
-        val motLayout = findViewById<LinearLayout>(R.id.motLayout)
-        vuesLettres.forEach { textView ->
-            motLayout.addView(textView)
-        }
-
-        // Quando o botão Adivinhar for clicado
         binding.btnEssayer.setOnClickListener {
             val lettre = binding.txtSaissirLettre.text.toString().firstOrNull()
             lettre?.let {
-                if (mot.contains(it, true)) {
-                    devinerLettre(it, mot)
+                if (!jeu.vuesLettres.contains(it) && !jeu.lettresIncorrectes.contains(it)) {
+                    if (jeu.guessLetter(it)) {
+                        miseAJourLettresDevinees()
+                    } else {
+                        miseAJourLettresIncorrectes()
+                    }
+                    binding.txtSaissirLettre.setText("") // apaga o valor de txtSaissirLettre
                 } else {
-                    devinerIncorrect(it)
+                    Toast.makeText(this, "Vous deja utilise cette lettre!", Toast.LENGTH_SHORT).show()
                 }
             }
+            verifierFinDePartie()
+            miseAJourLettresDevinees() // Atualiza as letras corretamente adivinhadas a cada tentativa
         }
 
-        // Reinitialiser le jeu
+
+
         binding.btnRejouer.setOnClickListener {
-            reinitialiserJeu()
+            jeu.resetGame()
+            miseAJourLettresDevinees()
+            miseAJourLettresIncorrectes()
+            binding.zoneImgPendu.setImageResource(R.drawable.img_default)
         }
 
-        // Desactiver le bouton de reinitialisation
-        binding.btnRejouer.isEnabled = false
+        // Definir a imagem inicial
+        miseAJourImage(0)
     }
 
-    // Quando uma letra é adivinhada corretamente, substitua o "_" correspondente
-    fun devinerLettre(lettre: Char, mot: String) {
-        val indices = mot.indices.filter { mot[it].toLowerCase() == lettre.toLowerCase() }  // Isso retorna os índices de 'lettre' em 'mot'
-        indices.forEach { index ->
-            vuesLettres[index].text = lettre.toString().toUpperCase()
-        }
+    // Escolher uma palavra com base no tema e na dificuldade
+    private fun choisirMot(theme: String?, difficulte: String?): String {
+        val mots = mapOf(
+            "Animaux" to mapOf(
+                "Facile" to listOf("lion"), // 4 letras
+                "Moyen" to listOf("panthère"), // 8 letras
+                "Difficile" to listOf("rhinocéros") // 10 letras
+            ),
+            "Pays" to mapOf(
+                "Facile" to listOf("Peru"), // 4 letras
+                "Moyen" to listOf("Portugal"), // 8 letras
+                "Difficile" to listOf("Afghanistan") // 11 letras
+            ),
+            "Instruments Musique" to mapOf(
+                "Facile" to listOf("harp"), // 4 letras
+                "Moyen" to listOf("trombone"), // 8 letras
+                "Difficile" to listOf("clavicémbalo") // 12 letras
+            ),
+            "Voitures" to mapOf(
+                "Facile" to listOf("Audi"), // 4 letras
+                "Moyen" to listOf("Mercedes"), // 8 letras
+                "Difficile" to listOf("Lamborghini") // 11 letras
+            ),
+        )
 
-        // Aqui você pode verificar se a palavra foi completamente adivinhada
-        // Se sim, você pode querer gravar no banco de dados que o usuário ganhou e levar o usuário para a próxima tela
-        if(!vuesLettres.any { it.text == "_" }) {
-            // l'utilisateur a gagné le jeu, enregistrez dans la base de données et faites une action
-            gameOver(true)
-        }
+        val motParDefaut = "girafe"
 
-        // Por fim, limpe o campo de entrada após cada tentativa
-        binding.txtSaissirLettre.text.clear()
-    }
-
-    // Quando uma letra é adivinhada incorretamente
-    fun devinerIncorrect(lettre: Char) {
-        if(lettresIncorrectes.contains(lettre)) {
-            // l'utilisateur a déjà deviné cette lettre, ne faites rien
-            Toast.makeText(this, "Cette lettre a deja utilise", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        lettresIncorrectes.add(lettre)
-        binding.txtMauvaisMot.text = lettresIncorrectes.joinToString(" ")
-        binding.txtMauvaisMot.setTextColor(ContextCompat.getColor(this, R.color.red))
-
-        // Mis à jour de l'image
-        miseAJourImage(lettresIncorrectes.size)
-
-        // effacer le champ de saisie
-        binding.txtSaissirLettre.text.clear()
-
-        // Verifie si l'utilisateur a perdu
-        if (lettresIncorrectes.size >= 10) {
-            // l'utilisateur a perdu le jeu, enregistrez dans la base de données et faites une action
-            gameOver(false)
-        }
-    }
-
-    // Quando o jogo termina, você pode querer salvar o resultado no banco de dados e levar o usuário para a próxima tela
-    fun gameOver(victoire: Boolean) {
-        if(victoire) {
-            Toast.makeText(this, "Vous avez gagné!", Toast.LENGTH_SHORT).show()
+        val motsThemeDifficulte = mots[theme]?.get(difficulte)
+        return if (motsThemeDifficulte != null && motsThemeDifficulte.isNotEmpty()) {
+            motsThemeDifficulte.random() // escolhe uma palavra aleatória da lista
         } else {
-            Toast.makeText(this, "Vous avez perdu!", Toast.LENGTH_SHORT).show()
-            binding.btnEssayer.isEnabled = false
-            binding.txtSaissirLettre.isEnabled = false
-
-            // Habilita o botão 'btnRejouer'
-            binding.btnRejouer.isEnabled = true
+            motParDefaut
         }
     }
 
-    fun reinitialiserJeu() {
-        // Redémarrer l'activité
+    private fun creerVuesLettres() {
+        binding.motLayout.removeAllViews()
 
-        // Reinitializer les lettres incorrectes
-        binding.txtSaissirLettre.text.clear()
-        binding.txtMauvaisMot.text = ""
-
-        // Reinitializer les lettres correctes
-        vuesLettres.forEach { it.text = "_" }
-
-        // Reinitializer les lettres incorrectes
-        lettresIncorrectes.clear()
-
-        // Reinitializer l'image
-        binding.zoneImgPendu.setImageResource(R.drawable.img_default)
-
-        // Reinitializer les entrees des boutons
-        binding.btnEssayer.isEnabled = true
-        binding.txtSaissirLettre.isEnabled = true
-
-        // Desactiver le bouton 'btnRejouer'
-        binding.btnRejouer.isEnabled = false
+        jeu.vuesLettres.forEach { letter ->
+            TextView(this).apply {
+                text = if (letter == '_') "_" else letter.toString().toUpperCase()
+                textSize = 24f
+                setPadding(8, 0, 8, 0)
+                binding.motLayout.addView(this)
+            }
+        }
     }
 
-    fun miseAJourImage(tentatives: Int) {
-        // Met à jour l'image en fonction du nombre de tentatives
-        val ressourceImage = when (tentatives) {
+    private fun miseAJourLettresDevinees() {
+        for (i in jeu.vuesLettres.indices) {
+            (binding.motLayout.getChildAt(i) as TextView).text =
+                if (jeu.vuesLettres[i] == '_') "_" else jeu.vuesLettres[i].toString().toUpperCase()
+        }
+    }
+
+    private fun miseAJourLettresIncorrectes() {
+        binding.txtMauvaisMot.text = jeu.lettresIncorrectes.joinToString(" ") { it.toString().toUpperCase() }
+        binding.txtMauvaisMot.setTextColor(ContextCompat.getColor(this, R.color.red))
+        miseAJourImage(jeu.lettresIncorrectes.size)
+    }
+
+
+    private fun verifierFinDePartie() {
+        if (jeu.isGameOver()) {
+            jeu.resultat = true
+            Toast.makeText(this, "Vous avez gagné!", Toast.LENGTH_SHORT).show()
+        } else if (jeu.lettresIncorrectes.size == 7) {
+            jeu.resultat = false
+            Toast.makeText(this, "Vous avez perdu! Le mot était ${jeu.mot}.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun miseAJourImage(nbrMauvaisesLettres: Int) {
+        val image = when (nbrMauvaisesLettres) {
+            0 -> R.drawable.img_default
             1 -> R.drawable.img_01
             2 -> R.drawable.img_02
             3 -> R.drawable.img_03
@@ -173,14 +151,16 @@ class JeuActivity : AppCompatActivity() {
             5 -> R.drawable.img_05
             6 -> R.drawable.img_06
             7 -> R.drawable.img_07
-            8 -> R.drawable.img_08
-            9 -> R.drawable.img_09
-            10 -> R.drawable.img_10
-            // ... ajoutez plus de cas si nécessaire
             else -> R.drawable.img_default
         }
-        binding.zoneImgPendu.setImageResource(ressourceImage)
+        binding.zoneImgPendu.setImageResource(image)
     }
 }
+
+
+
+
+
+
 
 

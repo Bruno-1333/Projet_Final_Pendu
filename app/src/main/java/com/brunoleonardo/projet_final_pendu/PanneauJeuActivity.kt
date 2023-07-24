@@ -13,14 +13,15 @@ class PanneauJeuActivity : AppCompatActivity() {
 
     // Referência ao botão de tema atualmente selecionado e suas imagens correspondentes
     private var currentThemeButton: Pair<ImageButton, Int>? = null
+    private var themeChoisi: String? = null
+    private var difficulteChoisi: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPanneauJeuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var themeChoisi = ""
-        var difficulteChoisi = ""
+        val utilisateur = intent.getSerializableExtra("utilisateur") as Utilisateur
 
         val themeButtons = mapOf(
             binding.imgBtnAnimaux to Triple("Animal", R.drawable.img_animal_normal, R.drawable.img_animal_choisi),
@@ -48,7 +49,6 @@ class PanneauJeuActivity : AppCompatActivity() {
 
                 // Atualize o tema escolhido
                 themeChoisi = theme
-
             }
         }
 
@@ -57,15 +57,19 @@ class PanneauJeuActivity : AppCompatActivity() {
                 R.id.radioBtnFacille -> "Facile"
                 R.id.radioBtnMoyen -> "Moyen"
                 R.id.radioBtnDifficile -> "Difficile"
-                else -> ""
+                else -> null
             }
         }
 
         binding.btnJouer.setOnClickListener {
-            if (themeChoisi.isNotEmpty() && difficulteChoisi.isNotEmpty()) {
+            if (themeChoisi != null && difficulteChoisi != null) {
+                val selectedTheme = themeChoisi!! // Récupérer le thème choisi
+                val selectedDifficulty = difficulteChoisi!! // Récupérer la difficulté choisie
+
                 val intent = Intent(this, JeuActivity::class.java).apply {
-                    putExtra("theme", themeChoisi)
-                    putExtra("difficulte", difficulteChoisi)
+                    putExtra("theme", selectedTheme)
+                    putExtra("difficulte", selectedDifficulty)
+                    putExtra("utilisateur", utilisateur)
                 }
                 startActivity(intent)
             } else {
@@ -74,3 +78,4 @@ class PanneauJeuActivity : AppCompatActivity() {
         }
     }
 }
+

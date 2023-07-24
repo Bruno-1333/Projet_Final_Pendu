@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityMainBinding
+import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    // Créer une liste pour stocker les utilisateurs
+    // Criação da lista para armazenar os utilizadores
     private val utilisateurs = mutableListOf<Utilisateur>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +29,13 @@ class MainActivity : AppCompatActivity() {
             val utilisateur = isValidUtilisateur(nomUtilisateur, motDePasse)
             if (utilisateur != null) {
                 val intent = if (utilisateur.isAdministrateur) {
-                    Intent(this, AdminActivity::class.java)
+                    Intent(this, AdminActivity::class.java).apply {
+                        putExtra("utilisateur", utilisateur)
+                    }
                 } else {
-                    Intent(this, PanneauJeuActivity::class.java)
+                    Intent(this, PanneauJeuActivity::class.java).apply {
+                        putExtra("utilisateur", utilisateur)
+                    }
                 }
                 startActivity(intent)
             } else {
@@ -39,7 +44,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnJouerLogin.setOnClickListener {
-            val intent = Intent(this, PanneauJeuActivity::class.java)
+            // Criamos um novo usuário padrão quando nenhum usuário está logado.
+            val utilisateur = Utilisateur(1, "Guest", "guest", "123456", false)
+
+            val intent = Intent(this, PanneauJeuActivity::class.java).apply {
+                putExtra("utilisateur", utilisateur)
+            }
             startActivity(intent)
         }
 
@@ -57,9 +67,9 @@ class MainActivity : AppCompatActivity() {
         }
         return null
     }
-
-    data class Utilisateur(val id: Int, val nom: String, val nomUtilisateur: String, val motDePasse: String, val isAdministrateur: Boolean)
 }
+
+
 
 
 
