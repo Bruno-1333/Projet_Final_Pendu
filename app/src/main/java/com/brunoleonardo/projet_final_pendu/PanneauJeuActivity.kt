@@ -8,14 +8,16 @@ import android.widget.ImageButton
 import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityPanneauJeuBinding
 
+// Classe qui gère l'activité du panneau de jeu
 class PanneauJeuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPanneauJeuBinding
 
-    // Referência ao botão de tema atualmente selecionado e suas imagens correspondentes
+    // Reference au bouton de theme actuellement selectionne et son image
     private var currentThemeButton: Pair<ImageButton, Int>? = null
     private var themeChoisi: String? = null
     private var difficulteChoisi: String? = null
 
+    // pour afficher le panneau de jeu et choisir le theme et la difficulte du jeu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPanneauJeuBinding.inflate(layoutInflater)
@@ -33,27 +35,28 @@ class PanneauJeuActivity : AppCompatActivity() {
         for ((button, info) in themeButtons) {
             val (theme, imgNormal, imgChoisi) = info
 
-            button.setImageResource(imgNormal) // Definir a imagem inicial do botão
+            button.setImageResource(imgNormal) // Definir l'image normale du bouton
 
             button.setOnClickListener {
-                // Desmarque o botão de tema atualmente selecionado, se houver um
+                // desactive le bouton de theme actuellement selectionne
                 currentThemeButton?.let { (currentButton, currentImgNormal) ->
                     currentButton.setImageResource(currentImgNormal)
                 }
 
-                // Marque o novo botão como selecionado
+                // selectionne le bouton de theme actuellement clique
                 button.setImageResource(imgChoisi)
 
-                // Atualize a referência ao botão de tema atualmente selecionado e sua imagem normal
+                // metrre a jour le bouton de theme actuellement selectionne
                 currentThemeButton = button to imgNormal
 
-                // Atualize o tema escolhido
+                // metrre a jour le theme choisi
                 themeChoisi = theme
             }
         }
 
+        // Gestion de la difficulté
         binding.groupeRadioDifficulte.setOnCheckedChangeListener { group, checkedId ->
-            difficulteChoisi = when (checkedId) {
+            difficulteChoisi = when (checkedId) { // Récupérer la difficulté choisie
                 R.id.radioBtnFacille -> "Facile"
                 R.id.radioBtnMoyen -> "Moyen"
                 R.id.radioBtnDifficile -> "Difficile"
@@ -61,6 +64,7 @@ class PanneauJeuActivity : AppCompatActivity() {
             }
         }
 
+        // Gestion du bouton jouer
         binding.btnJouer.setOnClickListener {
             if (themeChoisi != null && difficulteChoisi != null) {
                 val selectedTheme = themeChoisi!! // Récupérer le thème choisi
@@ -73,7 +77,7 @@ class PanneauJeuActivity : AppCompatActivity() {
                 }
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Veuillez sélectionner un thème et un niveau de difficulté.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Veuillez sélectionner un thème et un niveau de difficulté.", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
             }
         }
     }

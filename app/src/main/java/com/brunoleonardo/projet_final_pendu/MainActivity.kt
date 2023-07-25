@@ -7,21 +7,23 @@ import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityMainBinding
 import java.io.Serializable
 
-
+// crier une activité pour accéder au jeu
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    // Criação da lista para armazenar os utilizadores
+    // Crier une liste d'utilisateurs
     private val utilisateurs = mutableListOf<Utilisateur>()
 
+    // Vérifie si l'utilisateur existe et si le mot de passe est correct
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Adicionar um administrador por padrão
+        // Ajouter un utilisateur par défaut
         utilisateurs.add(Utilisateur(0, "Admin", "admin", "admin", true))
 
+        // bouton pour accéder à l'activité d'enregistrement d'un utilisateur
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
@@ -43,9 +45,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // bouton pour accéder à l'activité de jeu sans se enregistrer
         binding.btnJouerLogin.setOnClickListener {
-            // Criamos um novo usuário padrão quando nenhum usuário está logado.
-            val utilisateur = Utilisateur(1, "Guest", "guest", "123456", false)
+            // Creer un utilisateur par défaut
+            val utilisateur = Utilisateur(1, "Anonyme", "anonyme", "123456", false)
 
             val intent = Intent(this, PanneauJeuActivity::class.java).apply {
                 putExtra("utilisateur", utilisateur)
@@ -53,12 +56,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // bouton pour accéder à l'activité d'enregistrement d'un utilisateur
         binding.btnEnregistrerUtilisateurLogin.setOnClickListener {
             val intent = Intent(this, EnregistrerUtilisateurActivity::class.java)
             startActivity(intent)
         }
     }
 
+    // Vérifie si l'utilisateur existe et si le mot de passe est correct
     private fun isValidUtilisateur(nomUtilisateur: String, motDePasse: String): Utilisateur? {
         for (utilisateur in utilisateurs) {
             if (utilisateur.nomUtilisateur == nomUtilisateur && utilisateur.motDePasse == motDePasse) {
