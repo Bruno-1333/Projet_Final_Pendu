@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -193,6 +195,25 @@ class JeuActivity : AppCompatActivity() {
             else -> R.drawable.img_default
         }
         binding.zoneImgPendu.setImageResource(image)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflar o menu; isso adiciona itens à barra de ação, se estiver presente.
+        menuInflater.inflate(R.menu.menu_jeu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Lidar com cliques de itens de menu de ação
+        return when (item.itemId) {
+            R.id.action_back -> {
+                val intent = Intent(this, PanneauJeuActivity::class.java)
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
 
