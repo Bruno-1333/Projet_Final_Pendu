@@ -1,9 +1,14 @@
 package com.brunoleonardo.projet_final_pendu
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -26,7 +31,12 @@ class JeuActivity : AppCompatActivity() {
         val difficulte = intent.getStringExtra("difficulte") // récupérer la difficulté
 
         // Créer un nouveau jeu
-        val utilisateur = intent.getSerializableExtra("utilisateur") as Utilisateur // récupérer l'utilisateur
+        val utilisateur = intent.getSerializableExtra("utilisateur") as? Utilisateur // récupérer l'utilisateur
+        if (utilisateur == null) {
+            Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }// récupérer l'utilisateur
 
         // ici on va chercher ou générer le mot et la description
         val mot = choisirMot(theme, difficulte) // chercher ou générer le mot baseado no tema e dificuldade
@@ -58,15 +68,18 @@ class JeuActivity : AppCompatActivity() {
         }
 
 
-        // Creer le bouton pour rejouer
+        // bouton pour rejouer le jeu avec le même utilisateur, thème et difficulté
         binding.btnRejouer.setOnClickListener {
-            jeu.reJouer()
-            miseAJourLettresDevinees()
-            miseAJourLettresIncorrectes()
-            binding.zoneImgPendu.setImageResource(R.drawable.img_default)
+            val intent = Intent(this, JeuActivity::class.java)
+            intent.putExtra("utilisateur", jeu.utilisateur)
+            intent.putExtra("theme", jeu.theme)
+            intent.putExtra("difficulte", jeu.niveauDifficulte)
+            startActivity(intent)
+            finish()
         }
 
-        // mettre à jour l'image du pendu
+
+        // Mettre à jour l'image du pendu
         miseAJourImage(0)
     }
 
@@ -89,7 +102,7 @@ class JeuActivity : AppCompatActivity() {
                 "Difficile" to listOf("clavicémbalo") // 12 letras
             ),
             "Voitures" to mapOf(
-                "Facile" to listOf("Audi"), // 4 letras
+                "Facile" to listOf("Audi","Ford" ), // 4 letras
                 "Moyen" to listOf("Mercedes"), // 8 letras
                 "Difficile" to listOf("Lamborghini") // 11 letras
             ),
@@ -137,14 +150,31 @@ class JeuActivity : AppCompatActivity() {
 
     // Vérifier si la partie est terminée
     private fun verifierFinDePartie() {
-        if (jeu.isGameOver()) { // si la partie est terminée
+        if (jeu.isGameOver()) {
             jeu.resultat = true
             Toast.makeText(this, "Vous avez gagné!", Toast.LENGTH_SHORT).show()
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = Intent(this, ResultatActivity::class.java)
+                intent.putExtra("resultat", "victoire")
+                intent.putExtra("mot", jeu.mot)
+                startActivity(intent)
+                finish()
+            }, 2000)
+
         } else if (jeu.lettresIncorrectes.size == 10) {
             jeu.resultat = false
-            Toast.makeText(this, "Vous avez perdu! Le mot était ${jeu.mot}.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Tu as perdu! le mot était ${jeu.mot}.", Toast.LENGTH_SHORT).show()
+            finirJeu()
         }
     }
+
+    private fun finirJeu() {
+        binding.btnRejouer.visibility = View.VISIBLE
+        binding.btnEssayer.isEnabled = false
+        binding.txtSaissirLettre.isEnabled = false
+    }
+
+
 
     // Mettre à jour l'image du pendu selon le nombre de lettres incorrectes
     private fun miseAJourImage(nbrMauvaisesLettres: Int) {
