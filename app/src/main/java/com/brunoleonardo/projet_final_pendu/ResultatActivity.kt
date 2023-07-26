@@ -21,12 +21,14 @@ class ResultatActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)  // Configure a Toolbar como ActionBar
 
+        // obtenha o número de vitórias do usuário a partir do Intent
+        val victories = intent.getIntExtra("victoires", 0)
 
         // Suponha que os dados do usuário são esses:
         val user = "Utilisateur 1"
-        val victories = "5 victoires"
+        val victoriesText = "5 victoires"
 
-        val data = listOf(user, victories)
+        val data = listOf(user, victoriesText)
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data)
         binding.listResultat.adapter = adapter

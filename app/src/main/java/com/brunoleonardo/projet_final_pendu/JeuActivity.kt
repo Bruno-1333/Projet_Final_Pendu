@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -22,6 +23,7 @@ import java.util.Locale
 class JeuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJeuBinding
     private lateinit var jeu: Jeu
+    private var timer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +71,6 @@ class JeuActivity : AppCompatActivity() {
             miseAJourLettresDevinees() // Mettre à jour les lettres devinées
         }
 
-
         // bouton pour rejouer le jeu avec le même utilisateur, thème et difficulté
         binding.btnRejouer.setOnClickListener {
             val intent = Intent(this, JeuActivity::class.java)
@@ -80,9 +81,30 @@ class JeuActivity : AppCompatActivity() {
             finish()
         }
 
-
         // Mettre à jour l'image du pendu
         miseAJourImage(0)
+
+        // Começa a contagem regressiva de 1 minutos (120000 ms)
+        timer = object: CountDownTimer(60000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val remainingSeconds = millisUntilFinished / 1000
+                val minutes = remainingSeconds / 60
+                val seconds = remainingSeconds % 60
+
+                // Formata o tempo restante em "MM:SS" e atualiza o texto do TextView
+                binding.txtChronometre.text = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                // A contagem regressiva acabou. Desabilita a tela e mostra a imagem
+                binding.txtChronometre.text = "00:00"
+                binding.zoneImgPendu.setImageResource(R.drawable.img_10)
+                finirJeu()
+            }
+        }
+
+        // Começa a contagem regressiva
+        timer?.start()
     }
 
     // Choisir un mot selon le thème et la difficulté
@@ -151,13 +173,16 @@ class JeuActivity : AppCompatActivity() {
 
 
     // Vérifier si la partie est terminée
+
     private fun verifierFinDePartie() {
         if (jeu.isGameOver()) {
             jeu.resultat = true
-            Toast.makeText(this, "Vous avez gagné!", Toast.LENGTH_SHORT).show()
+            jeu.incrementVictories() // Incrementer le nombre de victoires
+            Toast.makeText(this, "Vous avez gagne!", Toast.LENGTH_SHORT).show()
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent = Intent(this, ResultatActivity::class.java)
                 intent.putExtra("resultat", "victoire")
+                intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
                 intent.putExtra("mot", jeu.mot)
                 startActivity(intent)
                 finish()
@@ -170,7 +195,10 @@ class JeuActivity : AppCompatActivity() {
         }
     }
 
+
     private fun finirJeu() {
+        // Cancela o timer para evitar que ele continue a funcionar após o jogo ter terminado
+        timer?.cancel()
         binding.btnRejouer.visibility = View.VISIBLE
         binding.btnEssayer.isEnabled = false
         binding.txtSaissirLettre.isEnabled = false
@@ -217,6 +245,12 @@ class JeuActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Cancela o timer para evitar que ele continue a funcionar após a atividade ter sido destruída
+        timer?.cancel()
     }
 
 }

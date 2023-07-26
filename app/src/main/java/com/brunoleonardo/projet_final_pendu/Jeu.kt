@@ -12,7 +12,8 @@ public class Jeu (
     niveauDifficulte: String,
     var resultat: Boolean = false,
     var vuesLettres: MutableList<Char> = mutableListOf(),
-    var lettresIncorrectes: MutableList<Char> = mutableListOf()
+    var lettresIncorrectes: MutableList<Char> = mutableListOf(),
+    var victories: Int = 0,
 ): Serializable { // Serializable pour pouvoir passer l'objet entre les activités
     // Crier les variables pour le jeu et les initialiser
     var theme: String = if (theme == "defaultTheme") {
@@ -43,7 +44,8 @@ public class Jeu (
                 " niveauDifficulte='$niveauDifficulte'\n" +
                 " resultat=$resultat\n" +
                 " vuesLettres=$vuesLettres\n" +
-                " lettresIncorrectes=$lettresIncorrectes)"
+                " lettresIncorrectes=$lettresIncorrectes)"+
+                " victories=$victories)"
     }
 
     // Fonction pour deviner une lettre et retourner un boolean si la lettre est dans le mot ou pas et mettre à jour les variables du jeu.
@@ -76,6 +78,11 @@ public class Jeu (
     fun reJouer() { // remettre les variables du jeu à leur valeur initiale
         lettresIncorrectes.clear()
         vuesLettres.fill('_')
+    }
+
+    // Fonction pour varifier la quantité de victoires
+    fun incrementVictories() {
+        victories++
     }
 }
 
