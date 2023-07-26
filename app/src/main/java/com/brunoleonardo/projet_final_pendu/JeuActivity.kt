@@ -204,17 +204,21 @@ class JeuActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Lidar com cliques de itens de menu de ação
         return when (item.itemId) {
-            R.id.action_back -> {
+            R.id.action_retour -> {
                 val intent = Intent(this, PanneauJeuActivity::class.java)
                 startActivity(intent)
                 finish()
                 true
             }
+            R.id.action_sortir -> {
+                finishAffinity()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
 
 
