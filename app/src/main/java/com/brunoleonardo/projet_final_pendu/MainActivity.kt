@@ -7,37 +7,29 @@ import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityMainBinding
 import java.io.Serializable
 
-// crier une activité pour accéder au jeu
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    // Crier une liste d'utilisateurs
+    // Create a list of users
     private val utilisateurs = mutableListOf<Utilisateur>()
 
-    // Vérifie si l'utilisateur existe et si le mot de passe est correct
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Ajouter un utilisateur par défaut
-        utilisateurs.add(Utilisateur(0, "Admin", "admin", "admin", true))
+        // Add a default user
+        utilisateurs.add(Utilisateur(0, "Admin", "admin", "admin"))
 
-        // bouton pour accéder à l'activité d'enregistrement d'un utilisateur
+        // button to access the user registration activity
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
 
             val utilisateur = isValidUtilisateur(nomUtilisateur, motDePasse)
             if (utilisateur != null) {
-                val intent = if (utilisateur.isAdministrateur) {
-                    Intent(this, AdminActivity::class.java).apply {
-                        putExtra("utilisateur", utilisateur)
-                    }
-                } else {
-                    Intent(this, PanneauJeuActivity::class.java).apply {
-                        putExtra("utilisateur", utilisateur)
-                    }
+                val intent = Intent(this, PanneauJeuActivity::class.java).apply {
+                    putExtra("utilisateur", utilisateur)
                 }
                 startActivity(intent)
             } else {
@@ -45,10 +37,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // bouton pour accéder à l'activité de jeu sans se enregistrer
+        // button to access the game activity without registering
         binding.btnJouerLogin.setOnClickListener {
-            // Creer un utilisateur par défaut
-            val utilisateur = Utilisateur(1, "Anonyme", "anonyme", "123456", false)
+            // Create a default user
+            val utilisateur = Utilisateur(1, "Anonyme", "anonyme", "123456")
 
             val intent = Intent(this, PanneauJeuActivity::class.java).apply {
                 putExtra("utilisateur", utilisateur)
@@ -56,14 +48,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // bouton pour accéder à l'activité d'enregistrement d'un utilisateur
+        // button to access the user registration activity
         binding.btnEnregistrerUtilisateurLogin.setOnClickListener {
             val intent = Intent(this, EnregistrerUtilisateurActivity::class.java)
             startActivity(intent)
         }
     }
 
-    // Vérifie si l'utilisateur existe et si le mot de passe est correct
+    // verifier si l'utilisateur et le mot de passe sont valides
     private fun isValidUtilisateur(nomUtilisateur: String, motDePasse: String): Utilisateur? {
         for (utilisateur in utilisateurs) {
             if (utilisateur.nomUtilisateur == nomUtilisateur && utilisateur.motDePasse == motDePasse) {
@@ -73,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 }
+
 
 
 
