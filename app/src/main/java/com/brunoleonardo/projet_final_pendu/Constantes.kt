@@ -6,7 +6,10 @@ object Constantes {
     const val ATTRIBUT_UTILISATEUR_NOM = "nom"
     const val ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR = "nomUtilisateur"
     const val ATTRIBUT_UTILISATEUR_MOT_DE_PASSE = "motDePasse"
-    const val ATTRIBUT_UTILISATEUR_IS_ADMINISTRATEUR = "isAdministrateur"
+
+    // Administrateur
+    const val ATTRIBUT_ADMINISTRATEUR_UserNeme = "admin"
+    const val ATTRIBUT_ADMINISTRATEUR_MotDePasse = "admin"
 
     // Jeu
     const val ATTRIBUT_JEU_ID = "id"

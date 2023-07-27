@@ -34,5 +34,22 @@
 
     <string name="btnSortir">Sortir</string>
 
+    // Activity Ajouter Mot
+    <string name="txtAjouterMot">Ajouter un mot</string>
+    <string name="txtDescriptionMot"> Description du Mot</string>
+    <string name="txtThemeMot">Choisir un theme du Mot</string>
+
+    <string name="radioBtnAnimaux">Animaux</string>
+    <string name="radioBtnPays">Pays</string>
+    <string name="radioBtnMusique">Instrument de Musique</string>
+    <string name="radioBtnVoiture">Marque de Voiture</string>
+
+    <string name="txtNiveauMot">Choisir un niveau de difficulte</string>
+    <string name="btnFacile">Facile</string>
+    <string name="btnMoyen">Moyen</string>
+    <string name="btnDifficile">Difficile</string>
+
+    <string name="btnEnregistrerMot">Ajouter</string>
+
 
 </resources>

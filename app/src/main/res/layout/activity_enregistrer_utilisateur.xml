@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/edtNomUtilisateur"
+        android:id="@+id/edtDescriptionMot"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -18,10 +18,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNom" />
+        app:layout_constraintTop_toBottomOf="@+id/edtMot" />
 
     <EditText
-        android:id="@+id/edtNom"
+        android:id="@+id/edtMot"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edtMotDePasse"
+        android:id="@+id/edtTheme"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNomUtilisateur" />
+        app:layout_constraintTop_toBottomOf="@+id/edtDescriptionMot" />
 
     <Button
         android:id="@+id/btnEnregistrer"
@@ -59,5 +59,5 @@
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtMotDePasse" />
+        app:layout_constraintTop_toBottomOf="@+id/edtTheme" />
 </androidx.constraintlayout.widget.ConstraintLayout>

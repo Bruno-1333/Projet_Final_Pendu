@@ -18,29 +18,39 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Add a default user
-        utilisateurs.add(Utilisateur(0, "Admin", "admin", "admin"))
+
 
         // button to access the user registration activity
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
+            val utilisateur = Utilisateur(1, "user", "123" )
 
-            val utilisateur = isValidUtilisateur(nomUtilisateur, motDePasse)
-            if (utilisateur != null) {
-                val intent = Intent(this, PanneauJeuActivity::class.java).apply {
-                    putExtra("utilisateur", utilisateur)
+            if(nomUtilisateur== Constantes.ATTRIBUT_ADMINISTRATEUR_UserNeme && motDePasse== Constantes.ATTRIBUT_ADMINISTRATEUR_MotDePasse){
+
+                val intent = Intent(this, AdminActivity::class.java)
+                    startActivity(intent)
+
+
+            }else{
+
+                if (isValidUtilisateur(nomUtilisateur, motDePasse)) {
+                    val intent = Intent(this, PanneauJeuActivity::class.java).apply {
+                        putExtra("utilisateur", utilisateur)
+                    }
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Utilisateur ou mot de passe invalide", Toast.LENGTH_SHORT).show()
                 }
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Nom d'utilisateur ou mot de passe invalide", Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
         // button to access the game activity without registering
         binding.btnJouerLogin.setOnClickListener {
             // Create a default user
-            val utilisateur = Utilisateur(1, "Anonyme", "anonyme", "123456")
+            val utilisateur = Utilisateur(1, "Anonyme", "anonyme" )
 
             val intent = Intent(this, PanneauJeuActivity::class.java).apply {
                 putExtra("utilisateur", utilisateur)
@@ -56,15 +66,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     // verifier si l'utilisateur et le mot de passe sont valides
-    private fun isValidUtilisateur(nomUtilisateur: String, motDePasse: String): Utilisateur? {
-        for (utilisateur in utilisateurs) {
-            if (utilisateur.nomUtilisateur == nomUtilisateur && utilisateur.motDePasse == motDePasse) {
-                return utilisateur
-            }
-        }
-        return null
+     fun isValidUtilisateur(nomUtilisateur: String, motDePasse: String): Boolean {
+        val utilisateur = Utilisateur(1, "user", "123" )
+        return utilisateur.nomUtilisateur == nomUtilisateur && utilisateur.motDePasse == motDePasse
     }
 }
+
+
 
 
 
