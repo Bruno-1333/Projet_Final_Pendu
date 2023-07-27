@@ -13,6 +13,21 @@
         android:theme="@style/Theme.Projet_Final_Pendu"
         tools:targetApi="31">
         <activity
+            android:name=".SupprimerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModifierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConsulterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AjouterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResultatActivity"
             android:exported="false" />
         <activity

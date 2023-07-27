@@ -5,7 +5,6 @@ import java.io.Serializable
 // Crier une classe pour le jeu
 
 public class Jeu (
-    var id: Int,
     var utilisateur: Utilisateur,
     theme: String,
     var mot: String = "",
@@ -14,7 +13,7 @@ public class Jeu (
     var resultat: Boolean = false,
     var vuesLettres: MutableList<Char> = mutableListOf(),
     var lettresIncorrectes: MutableList<Char> = mutableListOf(),
-    var victories: Int = 0
+    var victories: Int = 0,
 ): Serializable { // Serializable pour pouvoir passer l'objet entre les activités
     // Crier les variables pour le jeu et les initialiser
     var theme: String = if (theme == "defaultTheme") {

@@ -25,5 +25,14 @@
     <string name="btnEssayer">Essayer</string>
     <string name="btnRejouer">Rejouer</string>
 
+    // Activity Admin
+    <string name="txtMot">Bienvenue dans la section administrateur</string>
+    <string name="btnAjouterMot">Ajouter</string>
+    <string name="btnAfficherMot">Consulter</string>
+    <string name="btnModifierMot">Modifier</string>
+    <string name="btnSupprimerMot">Supprimer</string>
+
+    <string name="btnSortir">Sortir</string>
+
 
 </resources>

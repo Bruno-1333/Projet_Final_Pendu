@@ -1,10 +1,13 @@
-package com.brunoleonardo.projet_final_pendu
+
+/*package com.brunoleonardo.projet_final_pendu
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.brunoleonardo.projet_final_pendu.Constantes
+import com.brunoleonardo.projet_final_pendu.entities.Utilisateur
+import com.brunoleonardo.projet_final_pendu.entities.Jeu
 
 class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BASE, null, Constantes.VERSION_BD) {
     companion object {
@@ -13,7 +16,6 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
         const val COLONNE_NOM = "nom"
         const val COLONNE_NOM_UTILISATEUR = "nomUtilisateur"
         const val COLONNE_MOT_DE_PASSE = "motDePasse"
-        const val COLONNE_IS_ADMINISTRATEUR = "isAdministrateur"
 
         const val NOM_TABLE_JEU = "Jeux"
         const val COLONNE_THEME = "theme"
@@ -29,8 +31,7 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
                     "$COLONNE_ID INTEGER PRIMARY KEY," +
                     "$COLONNE_NOM TEXT," +
                     "$COLONNE_NOM_UTILISATEUR TEXT," +
-                    "$COLONNE_MOT_DE_PASSE TEXT," +
-                    "$COLONNE_IS_ADMINISTRATEUR INTEGER)"
+                    "$COLONNE_MOT_DE_PASSE TEXT)"
 
         const val SQL_CREER_TABLE_JEU =
             "CREATE TABLE $NOM_TABLE_JEU (" +
@@ -72,7 +73,6 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
         values.put(COLONNE_NOM, utilisateur.nom)
         values.put(COLONNE_NOM_UTILISATEUR, utilisateur.nomUtilisateur)
         values.put(COLONNE_MOT_DE_PASSE, utilisateur.motDePasse)
-        values.put(COLONNE_IS_ADMINISTRATEUR, if (utilisateur.isAdministrateur) 1 else 0)
 
         db.insert(NOM_TABLE_UTILISATEUR, null, values)
         db.close()
@@ -82,25 +82,24 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
         val db = this.readableDatabase
         val cursor = db.query(
             NOM_TABLE_UTILISATEUR,
-            arrayOf(COLONNE_ID, COLONNE_NOM, COLONNE_NOM_UTILISATEUR, COLONNE_MOT_DE_PASSE, COLONNE_IS_ADMINISTRATEUR),
+            arrayOf(COLONNE_ID, COLONNE_NOM, COLONNE_NOM_UTILISATEUR, COLONNE_MOT_DE_PASSE),
             "$COLONNE_NOM_UTILISATEUR=?",
             arrayOf(nomUtilisateur),
             null, null, null, null
         )
 
-        return if (cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             val utilisateur = Utilisateur(
                 cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2),
-                cursor.getString(3),
-                cursor.getInt(4) == 1
+                cursor.getString(3)
             )
             cursor.close()
-            utilisateur
+            return utilisateur
         } else {
             cursor?.close()
-            null
+            return null
         }
     }
 
@@ -111,15 +110,15 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
         values.put(COLONNE_NOM, utilisateur.nom)
         values.put(COLONNE_NOM_UTILISATEUR, utilisateur.nomUtilisateur)
         values.put(COLONNE_MOT_DE_PASSE, utilisateur.motDePasse)
-        values.put(COLONNE_IS_ADMINISTRATEUR, if (utilisateur.isAdministrateur) 1 else 0)
 
         db.update(NOM_TABLE_UTILISATEUR, values, "$COLONNE_ID=?", arrayOf(utilisateur.id.toString()))
         db.close()
     }
 
-    fun deleteUtilisateur(id: Int) {
+    fun deleteUtilisateur(utilisateur: Utilisateur) {
         val db = this.writableDatabase
-        db.delete(NOM_TABLE_UTILISATEUR, "$COLONNE_ID=?", arrayOf(id.toString()))
+
+        db.delete(NOM_TABLE_UTILISATEUR, "$COLONNE_ID=?", arrayOf(utilisateur.id.toString()))
         db.close()
     }
 
@@ -128,14 +127,15 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
     fun addJeu(jeu: Jeu) {
         val db = this.writableDatabase
 
-        val values = ContentValues()
-        values.put(COLONNE_UTILISATEUR_ID, jeu.utilisateur.id)
-        values.put(COLONNE_THEME, jeu.theme)
-        values.put(COLONNE_MOT, jeu.mot)
-        values.put(COLONNE_DESCRIPTION, jeu.description)
-        values.put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
-        values.put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
-        values.put(COLONNE_VICTOIRES, jeu.victories)
+        val values = ContentValues().apply {
+            put(COLONNE_UTILISATEUR_ID, jeu.utilisateurId)
+            put(COLONNE_THEME, jeu.theme)
+            put(COLONNE_MOT, jeu.mot)
+            put(COLONNE_DESCRIPTION, jeu.description)
+            put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
+            put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
+            put(COLONNE_VICTOIRES, jeu.victoires)
+        }
 
         db.insert(NOM_TABLE_JEU, null, values)
         db.close()
@@ -151,36 +151,37 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
             null, null, null, null
         )
 
-        return if (cursor != null && cursor.moveToFirst()) {
-            val jeu = Jeu(
-                cursor.getInt(0),
-                getUtilisateur(cursor.getString(1)) ?: return null,
-                cursor.getString(2),
-                cursor.getString(3),
-                cursor.getString(4),
-                cursor.getString(5),
-                cursor.getInt(6) == 1,
-                victories = cursor.getInt(7)
-            )
-            cursor.close()
-            jeu
-        } else {
-            cursor?.close()
-            null
+        cursor?.use {
+            if (it.moveToFirst()) {
+                return Jeu(
+                    it.getInt(it.getColumnIndex(COLONNE_ID)),
+                    it.getInt(it.getColumnIndex(COLONNE_UTILISATEUR_ID)),
+                    it.getString(it.getColumnIndex(COLONNE_THEME)),
+                    it.getString(it.getColumnIndex(COLONNE_MOT)),
+                    it.getString(it.getColumnIndex(COLONNE_DESCRIPTION)),
+                    it.getString(it.getColumnIndex(COLONNE_NIVEAU_DIFFICULTE)),
+                    it.getInt(it.getColumnIndex(COLONNE_RESULTAT)) == 1,
+                    mutableListOf(),
+                    it.getInt(it.getColumnIndex(COLONNE_VICTOIRES))
+                )
+            }
         }
+
+        return null
     }
 
     fun updateJeu(jeu: Jeu) {
         val db = this.writableDatabase
 
-        val values = ContentValues()
-        values.put(COLONNE_UTILISATEUR_ID, jeu.utilisateur.id)
-        values.put(COLONNE_THEME, jeu.theme)
-        values.put(COLONNE_MOT, jeu.mot)
-        values.put(COLONNE_DESCRIPTION, jeu.description)
-        values.put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
-        values.put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
-        values.put(COLONNE_VICTOIRES, jeu.victories)
+        val values = ContentValues().apply {
+            put(COLONNE_UTILISATEUR_ID, jeu.utilisateurId)
+            put(COLONNE_THEME, jeu.theme)
+            put(COLONNE_MOT, jeu.mot)
+            put(COLONNE_DESCRIPTION, jeu.description)
+            put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
+            put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
+            put(COLONNE_VICTOIRES, jeu.victoires)
+        }
 
         db.update(NOM_TABLE_JEU, values, "$COLONNE_ID=?", arrayOf(jeu.id.toString()))
         db.close()
@@ -191,7 +192,8 @@ class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BAS
         db.delete(NOM_TABLE_JEU, "$COLONNE_ID=?", arrayOf(id.toString()))
         db.close()
     }
-}
+
+}*/
 
 
 

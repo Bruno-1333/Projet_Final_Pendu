@@ -4,7 +4,7 @@ import java.io.Serializable
 
 // Créer une classe Utilisateur
 data class Utilisateur(val id: Int, val nom: String, val nomUtilisateur: String, val motDePasse: String, val isAdministrateur: Boolean): Serializable
- {
+{
     override fun toString(): String {
         return "Utilisateur(" +
                 "id=$id \n" +
@@ -13,5 +13,7 @@ data class Utilisateur(val id: Int, val nom: String, val nomUtilisateur: String,
                 " isAdministrateur=$isAdministrateur)"
     }
 }
+
+
 
 
