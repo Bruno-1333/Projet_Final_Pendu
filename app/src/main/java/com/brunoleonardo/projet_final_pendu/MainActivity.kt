@@ -10,35 +10,35 @@ import java.io.Serializable
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    // Create a list of users
-    private val utilisateurs = mutableListOf<Utilisateur>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        // Ouverture de la base de données
+        val dbHandler = DBHandler(this)
 
         // button to access the user registration activity
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
-            val utilisateur = Utilisateur(1, "user", "123" )
+            val utilisateur = dbHandler.chercherParUtilisateur(nomUtilisateur)
+
+
 
             if(nomUtilisateur== Constantes.ATTRIBUT_ADMINISTRATEUR_UserNeme && motDePasse== Constantes.ATTRIBUT_ADMINISTRATEUR_MotDePasse){
 
                 val intent = Intent(this, AdminActivity::class.java)
-                    startActivity(intent)
-
+                startActivity(intent)
 
             }else{
 
-                if (isValidUtilisateur(nomUtilisateur, motDePasse)) {
-                    val intent = Intent(this, PanneauJeuActivity::class.java).apply {
-                        putExtra("utilisateur", utilisateur)
-                    }
+                if (isValidUtilisateur(utilisateur, motDePasse)) {
+                    val intent = Intent(this, PanneauJeuActivity::class.java)
+                    intent.putExtra("utilisateurId", utilisateur!!.id)
                     startActivity(intent)
+
                 } else {
                     Toast.makeText(this, "Utilisateur ou mot de passe invalide", Toast.LENGTH_SHORT).show()
                 }
@@ -66,9 +66,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     // verifier si l'utilisateur et le mot de passe sont valides
-     fun isValidUtilisateur(nomUtilisateur: String, motDePasse: String): Boolean {
-        val utilisateur = Utilisateur(1, "user", "123" )
-        return utilisateur.nomUtilisateur == nomUtilisateur && utilisateur.motDePasse == motDePasse
+     fun isValidUtilisateur(utilisateur: Utilisateur?, motDePasse: String): Boolean {
+        if(utilisateur != null){
+            if(utilisateur.motDePasse == motDePasse)
+                return true
+
+        }
+        return false
     }
 }
 

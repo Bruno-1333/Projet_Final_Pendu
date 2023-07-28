@@ -23,7 +23,9 @@ class PanneauJeuActivity : AppCompatActivity() {
         binding = ActivityPanneauJeuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val utilisateur = intent.getSerializableExtra("utilisateur") as Utilisateur
+        val dbHandler = DBHandler(this) // Ouverture de la base de données
+        val utlisateurId = intent.getIntExtra("utilisateur", -1) // Récupérer l'ID de l'utilisateur
+        val utilisateur = dbHandler.chercherUtilisateurParId(utlisateurId) // Récupérer l'utilisateur
 
         val themeButtons = mapOf(
             binding.imgBtnAnimaux to Triple("Animal", R.drawable.img_animal_normal, R.drawable.img_animal_choisi),
@@ -69,6 +71,12 @@ class PanneauJeuActivity : AppCompatActivity() {
             if (themeChoisi != null && difficulteChoisi != null) {
                 val selectedTheme = themeChoisi!! // Récupérer le thème choisi
                 val selectedDifficulty = difficulteChoisi!! // Récupérer la difficulté choisie
+
+                val listMot = dbHandler.chercherMotParTheme(selectedTheme) // Récupérer la liste des mots du thème choisie dans la base de données
+
+                // Recuperer un mot aleatoire de la liste des mots du theme choisi
+
+                val randomMot = listMot.random()
 
                 val intent = Intent(this, JeuActivity::class.java).apply {
                     putExtra("theme", selectedTheme)

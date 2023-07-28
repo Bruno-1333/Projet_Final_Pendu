@@ -46,9 +46,9 @@ class JeuActivity : AppCompatActivity() {
         val mot = choisirMot(theme, difficulte) // chercher ou générer le mot baseado no tema e dificuldade
         val description = "descripcion_exemple" // chercher ou générer la description baseado no tema e dificuldade
 
-        jeu = Jeu(utilisateur, theme ?: "defaultTheme", mot, description, difficulte ?: "defaultDifficulte") // créer un nouveau jeu
+        //jeu = Jeu(utilisateur, theme ?: "defaultTheme", mot, description, difficulte ?: "defaultDifficulte") // créer un nouveau jeu
 
-        binding.txtDescription.text = jeu.description // afficher la description
+       // binding.txtDescription.text = jeu.description // afficher la description
 
         creerVuesLettres() // créer les vues des lettres
 
@@ -74,8 +74,8 @@ class JeuActivity : AppCompatActivity() {
         // bouton pour rejouer le jeu avec le même utilisateur, thème et difficulté
         binding.btnRejouer.setOnClickListener {
             val intent = Intent(this, JeuActivity::class.java)
-            intent.putExtra("utilisateur", jeu.utilisateur)
-            intent.putExtra("theme", jeu.theme)
+           // intent.putExtra("utilisateur", jeu.utilisateur)
+          //  intent.putExtra("theme", jeu.theme)
             intent.putExtra("difficulte", jeu.niveauDifficulte)
             startActivity(intent)
             finish()
@@ -108,7 +108,7 @@ class JeuActivity : AppCompatActivity() {
     }
 
     // Choisir un mot selon le thème et la difficulté
-    private fun choisirMot(theme: String?, difficulte: String?): String {
+   /* private fun choisirMot(theme: String?, difficulte: String?): String {
         val mots = mapOf(
             "Animaux" to mapOf( // Le map est utilisé pour associer le thème à la difficulté et à la liste de mots
                 "Facile" to listOf("lion"), // 4 letras
@@ -130,7 +130,11 @@ class JeuActivity : AppCompatActivity() {
                 "Moyen" to listOf("Mercedes"), // 8 letras
                 "Difficile" to listOf("Lamborghini") // 11 letras
             ),
-        )
+        )*/
+
+
+
+
 
         // mot par défaut si le thème ou la difficulté n'est pas trouvé
         val motParDefaut = "girafe"
@@ -183,7 +187,7 @@ class JeuActivity : AppCompatActivity() {
                 val intent = Intent(this, ResultatActivity::class.java)
                 intent.putExtra("resultat", "victoire")
                 intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
-                intent.putExtra("mot", jeu.mot)
+               // intent.putExtra("mot", jeu.mot)
                 startActivity(intent)
                 finish()
             }, 2000)

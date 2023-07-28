@@ -1,199 +1,311 @@
-
-/*package com.brunoleonardo.projet_final_pendu
+package com.brunoleonardo.projet_final_pendu
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.brunoleonardo.projet_final_pendu.Constantes
-import com.brunoleonardo.projet_final_pendu.entities.Utilisateur
-import com.brunoleonardo.projet_final_pendu.entities.Jeu
 
-class DBHandler(context: Context) : SQLiteOpenHelper(context, Constantes.NOM_BASE, null, Constantes.VERSION_BD) {
-    companion object {
-        const val NOM_TABLE_UTILISATEUR = "Utilisateurs"
-        const val COLONNE_ID = "id"
-        const val COLONNE_NOM = "nom"
-        const val COLONNE_NOM_UTILISATEUR = "nomUtilisateur"
-        const val COLONNE_MOT_DE_PASSE = "motDePasse"
-
-        const val NOM_TABLE_JEU = "Jeux"
-        const val COLONNE_THEME = "theme"
-        const val COLONNE_MOT = "mot"
-        const val COLONNE_DESCRIPTION = "description"
-        const val COLONNE_NIVEAU_DIFFICULTE = "niveauDifficulte"
-        const val COLONNE_RESULTAT = "resultat"
-        const val COLONNE_VICTOIRES = "victoires"
-        const val COLONNE_UTILISATEUR_ID = "utilisateurId"
-
-        const val SQL_CREER_TABLE_UTILISATEUR =
-            "CREATE TABLE $NOM_TABLE_UTILISATEUR (" +
-                    "$COLONNE_ID INTEGER PRIMARY KEY," +
-                    "$COLONNE_NOM TEXT," +
-                    "$COLONNE_NOM_UTILISATEUR TEXT," +
-                    "$COLONNE_MOT_DE_PASSE TEXT)"
-
-        const val SQL_CREER_TABLE_JEU =
-            "CREATE TABLE $NOM_TABLE_JEU (" +
-                    "$COLONNE_ID INTEGER PRIMARY KEY," +
-                    "$COLONNE_UTILISATEUR_ID INTEGER," +
-                    "$COLONNE_THEME TEXT," +
-                    "$COLONNE_MOT TEXT," +
-                    "$COLONNE_DESCRIPTION TEXT," +
-                    "$COLONNE_NIVEAU_DIFFICULTE TEXT," +
-                    "$COLONNE_RESULTAT INTEGER," +
-                    "$COLONNE_VICTOIRES INTEGER," +
-                    "FOREIGN KEY($COLONNE_UTILISATEUR_ID) REFERENCES $NOM_TABLE_UTILISATEUR($COLONNE_ID))"
-
-        const val SQL_SUPPRIMER_TABLE_UTILISATEUR = "DROP TABLE IF EXISTS $NOM_TABLE_UTILISATEUR"
-        const val SQL_SUPPRIMER_TABLE_JEU = "DROP TABLE IF EXISTS $NOM_TABLE_JEU"
-    }
+class DBHandler(context: Context) :
+    SQLiteOpenHelper(context, Constantes.NOM_BASE, null, Constantes.VERSION_BD) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREER_TABLE_UTILISATEUR)
-        db.execSQL(SQL_CREER_TABLE_JEU)
+        val CREATE_UTILISATEUR_TABLE = ("CREATE TABLE ${Constantes.TABLE_UTILISATEUR}(" +
+                "${Constantes.ATTRIBUT_UTILISATEUR_ID} INTEGER PRIMARY KEY," +
+                "${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} TEXT," +
+                "${Constantes.ATTRIBUT_UTILISATEUR_MOT_DE_PASSE} TEXT)")
+
+        val CREATE_JEU_TABLE = ("CREATE TABLE ${Constantes.TABLE_JEU}(" +
+                "${Constantes.ATTRIBUT_JEU_ID} INTEGER PRIMARY KEY," +
+                "${Constantes.ATTRIBUT_JEU_UTILISATEUR_ID} INTEGER, " +
+                "${Constantes.ATTRIBUT_JEU_MOT_ID} INTEGER," +
+                "${Constantes.ATTRIBUT_JEU_NIVEAU_DIFFICULTE} TEXT," +
+                "${Constantes.ATTRIBUT_JEU_RESULTAT} TEXT," +
+                "${Constantes.ATTRIBUT_JEU_VICTOIRES} INTEGER," +
+                "FOREIGN KEY(${Constantes.ATTRIBUT_JEU_UTILISATEUR_ID}) REFERENCES ${Constantes.TABLE_UTILISATEUR}(${Constantes.ATTRIBUT_UTILISATEUR_ID}), " +
+                "FOREIGN KEY(${Constantes.ATTRIBUT_JEU_MOT_ID}) REFERENCES ${Constantes.TABLE_MOT}(${Constantes.ATTRIBUT_MOT_ID}))")
+
+        val CREATE_MOT_TABLE = ("CREATE TABLE ${Constantes.TABLE_MOT}(" +
+                "${Constantes.ATTRIBUT_MOT_ID} INTEGER PRIMARY KEY," +
+                "${Constantes.ATTRIBUT_MOT_MOT} TEXT, " +
+                "${Constantes.ATTRIBUT_MOT_DESCRIPTION} TEXT," +
+                "${Constantes.ATTRIBUT_MOT_THEME} TEXT)")
+
+
+
+        db.execSQL(CREATE_UTILISATEUR_TABLE)
+        db.execSQL(CREATE_JEU_TABLE)
+        db.execSQL(CREATE_MOT_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL(SQL_SUPPRIMER_TABLE_UTILISATEUR)
-        db.execSQL(SQL_SUPPRIMER_TABLE_JEU)
+        db.execSQL("DROP TABLE IF EXISTS ${Constantes.TABLE_UTILISATEUR}")
+        db.execSQL("DROP TABLE IF EXISTS ${Constantes.TABLE_JEU}")
         onCreate(db)
     }
 
-    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        onUpgrade(db, oldVersion, newVersion)
-    }
+    // Fonctions CRUD pour la table Utilisateur
 
-    // Métodos CRUD para Utilisateur
-
-    fun addUtilisateur(utilisateur: Utilisateur) {
-        val db = this.writableDatabase
-
-        val values = ContentValues()
-        values.put(COLONNE_NOM, utilisateur.nom)
-        values.put(COLONNE_NOM_UTILISATEUR, utilisateur.nomUtilisateur)
-        values.put(COLONNE_MOT_DE_PASSE, utilisateur.motDePasse)
-
-        db.insert(NOM_TABLE_UTILISATEUR, null, values)
-        db.close()
-    }
-
-    fun getUtilisateur(nomUtilisateur: String): Utilisateur? {
+    fun rechercheUtilisateurs (): ArrayList<Utilisateur> {
+        val utilisateurList: ArrayList<Utilisateur> = ArrayList()
         val db = this.readableDatabase
-        val cursor = db.query(
-            NOM_TABLE_UTILISATEUR,
-            arrayOf(COLONNE_ID, COLONNE_NOM, COLONNE_NOM_UTILISATEUR, COLONNE_MOT_DE_PASSE),
-            "$COLONNE_NOM_UTILISATEUR=?",
-            arrayOf(nomUtilisateur),
-            null, null, null, null
-        )
 
-        if (cursor != null && cursor.moveToFirst()) {
-            val utilisateur = Utilisateur(
-                cursor.getInt(0),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getString(3)
-            )
-            cursor.close()
-            return utilisateur
-        } else {
-            cursor?.close()
-            return null
-        }
-    }
 
-    fun updateUtilisateur(utilisateur: Utilisateur) {
-        val db = this.writableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_UTILISATEUR}"
+        val cursor = db.rawQuery(selectQuery, null)
 
-        val values = ContentValues()
-        values.put(COLONNE_NOM, utilisateur.nom)
-        values.put(COLONNE_NOM_UTILISATEUR, utilisateur.nomUtilisateur)
-        values.put(COLONNE_MOT_DE_PASSE, utilisateur.motDePasse)
+       val res = cursor.moveToFirst()
 
-        db.update(NOM_TABLE_UTILISATEUR, values, "$COLONNE_ID=?", arrayOf(utilisateur.id.toString()))
-        db.close()
-    }
+        if(res){
+            do {
+                val id = cursor.getInt(0)
+                val nomUtilisateur = cursor.getString(1)
+                val motDePasse = cursor.getString(2)
 
-    fun deleteUtilisateur(utilisateur: Utilisateur) {
-        val db = this.writableDatabase
+                val utilisateur = Utilisateur(id, nomUtilisateur, motDePasse)
+                utilisateurList.add(utilisateur)
+            } while (cursor.moveToNext())
 
-        db.delete(NOM_TABLE_UTILISATEUR, "$COLONNE_ID=?", arrayOf(utilisateur.id.toString()))
-        db.close()
-    }
-
-    // Métodos CRUD para Jeu
-
-    fun addJeu(jeu: Jeu) {
-        val db = this.writableDatabase
-
-        val values = ContentValues().apply {
-            put(COLONNE_UTILISATEUR_ID, jeu.utilisateurId)
-            put(COLONNE_THEME, jeu.theme)
-            put(COLONNE_MOT, jeu.mot)
-            put(COLONNE_DESCRIPTION, jeu.description)
-            put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
-            put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
-            put(COLONNE_VICTOIRES, jeu.victoires)
         }
 
-        db.insert(NOM_TABLE_JEU, null, values)
+        cursor.close()
         db.close()
+        return utilisateurList
     }
 
-    fun getJeu(id: Int): Jeu? {
+    fun chercherUtilisateurParId (Id : Int): Utilisateur? {
         val db = this.readableDatabase
-        val cursor = db.query(
-            NOM_TABLE_JEU,
-            arrayOf(COLONNE_ID, COLONNE_UTILISATEUR_ID, COLONNE_THEME, COLONNE_MOT, COLONNE_DESCRIPTION, COLONNE_NIVEAU_DIFFICULTE, COLONNE_RESULTAT, COLONNE_VICTOIRES),
-            "$COLONNE_ID=?",
-            arrayOf(id.toString()),
-            null, null, null, null
-        )
-
-        cursor?.use {
-            if (it.moveToFirst()) {
-                return Jeu(
-                    it.getInt(it.getColumnIndex(COLONNE_ID)),
-                    it.getInt(it.getColumnIndex(COLONNE_UTILISATEUR_ID)),
-                    it.getString(it.getColumnIndex(COLONNE_THEME)),
-                    it.getString(it.getColumnIndex(COLONNE_MOT)),
-                    it.getString(it.getColumnIndex(COLONNE_DESCRIPTION)),
-                    it.getString(it.getColumnIndex(COLONNE_NIVEAU_DIFFICULTE)),
-                    it.getInt(it.getColumnIndex(COLONNE_RESULTAT)) == 1,
-                    mutableListOf(),
-                    it.getInt(it.getColumnIndex(COLONNE_VICTOIRES))
-                )
-            }
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_ID} = $Id"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        var utilisateur : Utilisateur? = null
+        if(res){
+            val id = cursor.getInt(0)
+            val nomUtilisateur = cursor.getString(1)
+            val motDePasse = cursor.getString(2)
+            utilisateur = Utilisateur(id, nomUtilisateur, motDePasse)
         }
-
-        return null
+        cursor.close()
+        db.close()
+        return utilisateur
     }
 
-    fun updateJeu(jeu: Jeu) {
-        val db = this.writableDatabase
-
-        val values = ContentValues().apply {
-            put(COLONNE_UTILISATEUR_ID, jeu.utilisateurId)
-            put(COLONNE_THEME, jeu.theme)
-            put(COLONNE_MOT, jeu.mot)
-            put(COLONNE_DESCRIPTION, jeu.description)
-            put(COLONNE_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
-            put(COLONNE_RESULTAT, if (jeu.resultat) 1 else 0)
-            put(COLONNE_VICTOIRES, jeu.victoires)
+    fun chercherParUtilisateur(userName : String) : Utilisateur? {
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = $userName"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        var utilisateur : Utilisateur? = null
+        if(res){
+            val id = cursor.getInt(0)
+            val nomUtilisateur = cursor.getString(1)
+            val motDePasse = cursor.getString(2)
+            utilisateur = Utilisateur(id, nomUtilisateur, motDePasse)
         }
+        cursor.close()
+        db.close()
+        return utilisateur
+    }
 
-        db.update(NOM_TABLE_JEU, values, "$COLONNE_ID=?", arrayOf(jeu.id.toString()))
+    fun ajouterUtilisateur(Utilisateur: Utilisateur) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR, Utilisateur.nomUtilisateur)
+        contentValues.put(Constantes.ATTRIBUT_UTILISATEUR_MOT_DE_PASSE, Utilisateur.motDePasse)
+
+        db.insert(Constantes.TABLE_UTILISATEUR, null, contentValues)
+
         db.close()
     }
 
-    fun deleteJeu(id: Int) {
+    fun modifierUtilisateur(Utilisateur: Utilisateur) {
         val db = this.writableDatabase
-        db.delete(NOM_TABLE_JEU, "$COLONNE_ID=?", arrayOf(id.toString()))
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR, Utilisateur.nomUtilisateur)
+        contentValues.put(Constantes.ATTRIBUT_UTILISATEUR_MOT_DE_PASSE, Utilisateur.motDePasse)
+
+        db.update(Constantes.TABLE_UTILISATEUR, contentValues, "${Constantes.ATTRIBUT_UTILISATEUR_ID} = ?", arrayOf(Utilisateur.id.toString()))
+
         db.close()
     }
 
-}*/
+    fun supprimerUtilisateur(Utilisateur: Utilisateur) {
+        val db = this.writableDatabase
+        db.delete(Constantes.TABLE_UTILISATEUR, "${Constantes.ATTRIBUT_UTILISATEUR_ID} = ?", arrayOf(Utilisateur.id.toString()))
+        db.close()
+    }
+
+    // Functions CRUD pour la table Jeu
+
+    fun chercherMots (): ArrayList<Mot> {
+        val motList: ArrayList<Mot> = ArrayList()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT}"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        if(res){
+            do {
+                val id = cursor.getInt(0)
+                val motJeu = cursor.getString(1)
+                val description = cursor.getString(2)
+                val theme = cursor.getString(3)
+                val mot = Mot(id, motJeu, description, theme)
+                motList.add(mot)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return motList
+    }
+
+    fun chercherParMot(mot: String): Mot? {
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_JEU} WHERE ${Constantes.ATTRIBUT_MOT_MOT} = $mot"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        var mot : Mot? = null
+        if(res){
+            val id = cursor.getInt(0)
+            val motJeu = cursor.getString(1)
+            val description = cursor.getString(2)
+            val theme = cursor.getString(3)
+
+            mot = Mot(id,motJeu, description, theme)
+        }
+        cursor.close()
+        db.close()
+        return mot
+    }
+
+    fun chercherMotParTheme(Theme : String) : ArrayList<Mot> {
+        val motList: ArrayList<Mot> = ArrayList()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = $Theme"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        if(res){
+            do {
+                val id = cursor.getInt(0)
+                val motJeu = cursor.getString(1)
+                val description = cursor.getString(2)
+                val theme = cursor.getString(3)
+                val mot = Mot(id, motJeu, description, theme)
+                motList.add(mot)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return motList
+    }
+
+    fun chercherMotParId(Id : Int): Mot? {
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_ID} = $Id"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        var mot : Mot? = null
+        if(res){
+            val id = cursor.getInt(0)
+            val motJeu = cursor.getString(1)
+            val description = cursor.getString(2)
+            val theme = cursor.getString(3)
+            mot = Mot(id, motJeu, description, theme)
+        }
+        cursor.close()
+        db.close()
+        return mot
+    }
+
+    fun ajouterMot(mot: Mot) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_MOT_MOT, mot.mot)
+        contentValues.put(Constantes.ATTRIBUT_MOT_DESCRIPTION, mot.description)
+        contentValues.put(Constantes.ATTRIBUT_MOT_THEME, mot.theme)
+
+        db.insert(Constantes.TABLE_MOT, null, contentValues)
+
+        db.close()
+    }
+
+    fun modifierMot(mot: Mot) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_MOT_MOT, mot.mot)
+        contentValues.put(Constantes.ATTRIBUT_MOT_DESCRIPTION, mot.description)
+        contentValues.put(Constantes.ATTRIBUT_MOT_THEME, mot.theme)
+
+        db.update(Constantes.TABLE_MOT, contentValues, "${Constantes.ATTRIBUT_MOT_ID} = ?", arrayOf(mot.id.toString()))
+
+        db.close()
+    }
+
+    fun supprimerMot(mot: Mot) {
+        val db = this.writableDatabase
+        db.delete(Constantes.TABLE_MOT, "${Constantes.ATTRIBUT_MOT_ID} = ?", arrayOf(mot.id.toString()))
+        db.close()
+    }
+
+    // Functions CRUD pour la table Jeu
+
+    fun chercherJeu (): ArrayList<Jeu> {
+        val jeuList: ArrayList<Jeu> = ArrayList()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_JEU}"
+        val cursor = db.rawQuery(selectQuery, null)
+        val res = cursor.moveToFirst()
+        if(res){
+            do {
+                val id = cursor.getInt(0)
+                val utilisateurId = cursor.getInt(1)
+                val motId = cursor.getInt(2)
+                val niveauDifficulte = cursor.getString(3)
+                val resultat = cursor.getString(4).toBoolean()
+                val victories = cursor.getInt(5)
+                val mot = chercherMotParId(motId)
+                val jeu = Jeu(id, utilisateurId, mot!!, niveauDifficulte, resultat, victories)
+                jeuList.add(jeu)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return jeuList
+    }
+
+    fun ajouterJeu(jeu: Jeu) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_JEU_UTILISATEUR_ID, jeu.utilisateurId)
+        contentValues.put(Constantes.ATTRIBUT_JEU_MOT_ID, jeu.mot.id)
+        contentValues.put(Constantes.ATTRIBUT_JEU_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
+        contentValues.put(Constantes.ATTRIBUT_JEU_RESULTAT, jeu.resultat)
+        contentValues.put(Constantes.ATTRIBUT_JEU_VICTOIRES, jeu.victories)
+
+        db.insert(Constantes.TABLE_JEU, null, contentValues)
+
+        db.close()
+    }
+
+    fun modifierJue(jeu: Jeu) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constantes.ATTRIBUT_JEU_UTILISATEUR_ID, jeu.utilisateurId)
+        contentValues.put(Constantes.ATTRIBUT_JEU_MOT_ID, jeu.mot.id)
+        contentValues.put(Constantes.ATTRIBUT_JEU_NIVEAU_DIFFICULTE, jeu.niveauDifficulte)
+        contentValues.put(Constantes.ATTRIBUT_JEU_RESULTAT, jeu.resultat)
+        contentValues.put(Constantes.ATTRIBUT_JEU_VICTOIRES, jeu.victories)
+
+        db.update(Constantes.TABLE_JEU, contentValues, "${Constantes.ATTRIBUT_JEU_ID} = ?", arrayOf(jeu.id.toString()))
+
+        db.close()
+    }
+
+    fun supprimerJeu(jeu: Jeu) {
+        val db = this.writableDatabase
+        db.delete(Constantes.TABLE_JEU, "${Constantes.ATTRIBUT_JEU_ID} = ?", arrayOf(jeu.id.toString()))
+        db.close()
+    }
+
+}
 
 
 
