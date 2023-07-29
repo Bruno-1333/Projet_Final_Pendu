@@ -16,8 +16,35 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val listMot = arrayListOf<Mot>()
+        listMot.add(Mot("lion", "C'est un animal qui vit dans la forêt", "Animaux", "Facile"))
+        listMot.add(Mot("panthère", "C'est un animal qui vit dans la forêt", "Animaux", "Moyen"))
+        listMot.add(Mot("rhinocéros", "C'est un animal qui vit dans la forêt", "Animaux", "Difficile"))
+        listMot.add(Mot("Peru", "C'est un pays qui est situé en Amérique du Sud", "Pays", "Facile"))
+        listMot.add(Mot("Portugal", "C'est un pays qui est situé en Europe", "Pays", "Moyen"))
+        listMot.add(Mot("Afghanistan", "C'est un pays qui est situé en Asie", "Pays", "Difficile"))
+        listMot.add(Mot("harp", "C'est un instrument de musique", "Instruments Musique", "Facile"))
+        listMot.add(Mot("trombone", "C'est un instrument de musique", "Instruments Musique", "Moyen"))
+        listMot.add(Mot("clavicémbalo", "C'est un instrument de musique", "Instruments Musique", "Difficile"))
+        listMot.add(Mot("Audi", "C'est une voiture de luxe", "Voitures", "Facile"))
+        listMot.add(Mot("Ford", "C'est une voiture de luxe", "Voitures", "Facile"))
+        listMot.add(Mot("Mercedes", "C'est une voiture de luxe", "Voitures", "Moyen"))
+        listMot.add(Mot("Lamborghini", "C'est une voiture de luxe", "Voitures", "Difficile"))
+
+
         // Ouverture de la base de données
         val dbHandler = DBHandler(this)
+
+
+
+       /* val utilisateur = Utilisateur(1, "anonyme", "anonyme")
+       dbHandler.ajouterUtilisateur(utilisateur)*/
+
+
+        dbHandler.supprimerToutMot()
+        for (mot in listMot) {
+            dbHandler.ajouterMot(mot)
+        }
 
         // button to access the user registration activity
         binding.btnEntrerLogin.setOnClickListener {
@@ -50,11 +77,10 @@ class MainActivity : AppCompatActivity() {
         // button to access the game activity without registering
         binding.btnJouerLogin.setOnClickListener {
             // Create a default user
-            val utilisateur = Utilisateur(1, "Anonyme", "anonyme" )
 
-            val intent = Intent(this, PanneauJeuActivity::class.java).apply {
-                putExtra("utilisateur", utilisateur)
-            }
+
+            val intent = Intent(this, PanneauJeuActivity::class.java)
+            intent.putExtra("utilisateurId", 1)
             startActivity(intent)
         }
 

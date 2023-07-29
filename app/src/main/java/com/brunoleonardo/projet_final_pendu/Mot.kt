@@ -8,6 +8,7 @@ import java.io.Serializable
     var mot: String,
     var description: String,
     var theme: String,
+    var niveauDifficulte: String,
 
 ){
 
@@ -17,14 +18,16 @@ import java.io.Serializable
         mot: String,
         description: String,
         theme: String,
+        niveauDifficulte: String
     ) : this(
         0,
         mot,
         description,
         theme,
+        niveauDifficulte
     )
     override fun toString(): String {
-        return "Mot(id=$id, mot='$mot', description='$description', theme='$theme')"
+        return "Mot(id=$id, mot='$mot', description='$description', theme='$theme', niveauDifficulte='$niveauDifficulte')"
     }
 }
 

@@ -24,7 +24,7 @@ class PanneauJeuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val dbHandler = DBHandler(this) // Ouverture de la base de données
-        val utlisateurId = intent.getIntExtra("utilisateur", -1) // Récupérer l'ID de l'utilisateur
+        val utlisateurId = intent.getIntExtra("utilisateurId", -1) // Récupérer l'ID de l'utilisateur
         val utilisateur = dbHandler.chercherUtilisateurParId(utlisateurId) // Récupérer l'utilisateur
 
         val themeButtons = mapOf(
@@ -72,18 +72,16 @@ class PanneauJeuActivity : AppCompatActivity() {
                 val selectedTheme = themeChoisi!! // Récupérer le thème choisi
                 val selectedDifficulty = difficulteChoisi!! // Récupérer la difficulté choisie
 
-                val listMot = dbHandler.chercherMotParTheme(selectedTheme) // Récupérer la liste des mots du thème choisie dans la base de données
+                val mot = dbHandler.chercherMotsParThemeDifficulte(selectedTheme, selectedDifficulty) // Récupérer un mot aléatoire selon le thème et la difficulté choisis
 
-                // Recuperer un mot aleatoire de la liste des mots du theme choisi
-
-                val randomMot = listMot.random()
-
-                val intent = Intent(this, JeuActivity::class.java).apply {
-                    putExtra("theme", selectedTheme)
-                    putExtra("difficulte", selectedDifficulty)
-                    putExtra("utilisateur", utilisateur)
+                if(mot != null) {
+                    val intent = Intent(this, JeuActivity::class.java) // Créer une nouvelle activité
+                    intent.putExtra("motid", mot.id) // Envoyer le mot à l'activité
+                    intent.putExtra("utilisateurId2", utlisateurId) // Envoyer l'utilisateur à l'activité
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Aucun mot trouvé pour le thème et la difficulté choisis.", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
                 }
-                startActivity(intent)
             } else {
                 Toast.makeText(this, "Veuillez sélectionner un thème et un niveau de difficulté.", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
             }

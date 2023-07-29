@@ -14,8 +14,6 @@ object Constantes {
     // Jeu
     const val ATTRIBUT_JEU_ID = "id"
     const val ATTRIBUT_JEU_MOT_ID = "mot"
-
-    const val ATTRIBUT_JEU_NIVEAU_DIFFICULTE = "niveauDifficulte"
     const val ATTRIBUT_JEU_RESULTAT = "resultat"
     const val ATTRIBUT_JEU_VICTOIRES = "victoires"
     const val ATTRIBUT_JEU_UTILISATEUR_ID = "utilisateurId"
@@ -26,12 +24,13 @@ object Constantes {
     const val ATTRIBUT_MOT_MOT = "mot"
     const val ATTRIBUT_MOT_DESCRIPTION = "description"
     const val ATTRIBUT_MOT_THEME = "theme"
+    const val ATTRIBUT_MOT_NIVEAU_DIFFICULTE = "niveauDifficulte"
 
 
 
     // Nom de la base de données et version
     const val NOM_BASE = "pendu.db"
-    const val VERSION_BD = 1
+    const val VERSION_BD = 100
 
     // Tables
     const val TABLE_UTILISATEUR = "utilisateur"

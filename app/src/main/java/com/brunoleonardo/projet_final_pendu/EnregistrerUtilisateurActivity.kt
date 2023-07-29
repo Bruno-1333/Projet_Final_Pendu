@@ -15,10 +15,13 @@ class EnregistrerUtilisateurActivity : AppCompatActivity() {
 
         val dbHandler = DBHandler(this)
 
-        val nomUtilisateur = binding.editUtilisateurUser.text.toString()
-        val motDePasse = binding.editUtilisateurMotPasse.text.toString()
+
 
         binding.btnEnregistrerUtilisateur.setOnClickListener {
+
+            val nomUtilisateur = binding.editUtilisateurUser.text.toString()
+            val motDePasse = binding.editUtilisateurMotPasse.text.toString()
+
             val utilisateur = Utilisateur(1, nomUtilisateur, motDePasse)
             dbHandler.ajouterUtilisateur(utilisateur)
 

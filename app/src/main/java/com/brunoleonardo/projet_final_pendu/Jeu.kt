@@ -8,7 +8,7 @@ class Jeu(
     var id: Int,
     var utilisateurId: Int,
     var mot: Mot,
-    var niveauDifficulte: String,
+
     var resultat: Boolean = false,
     var vuesLettresString: String = "",
     var lettresIncorrectesString: String = "",
@@ -20,14 +20,12 @@ class Jeu(
         id: Int,
         utilisateurId: Int,
         mot: Mot,
-        niveauDifficulte: String,
         resultat: Boolean = false,
         victories: Int = 0,
     ) : this(
         id,
         utilisateurId,
         mot,
-        niveauDifficulte,
         resultat,
         "",
         "",
@@ -43,7 +41,6 @@ class Jeu(
     override fun toString(): String {
         return "Jeu(utilisateurId=$utilisateurId\n" +
                 " mot='$mot'\n" +
-                " niveauDifficulte='$niveauDifficulte'\n" +
                 " resultat=$resultat\n" +
                 " vuesLettres=$vuesLettres\n" +
                 " lettresIncorrectes=$lettresIncorrectes)"+

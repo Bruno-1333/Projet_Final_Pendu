@@ -31,22 +31,21 @@ class JeuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Récupération des données de l'activité précédente (PanneauJeuActivity)
-        val theme = intent.getStringExtra("theme") // récupérer le thème
-        val difficulte = intent.getStringExtra("difficulte") // récupérer la difficulté
+       val dbHandler = DBHandler(this) // Ouverture de la base de données
+        val motid = intent.getIntExtra("motid", -1) // Récupérer l'ID du mot
+        val mot = dbHandler.chercherMotParId(motid) // Récupérer le mot
+        val utilisateurid = intent.getIntExtra("utilisateurId2", -1) // Récupérer l'ID de l'utilisateur
+        val utilisateur = dbHandler.chercherUtilisateurParId(utilisateurid) // Récupérer l'utilisateur
 
         // Créer un nouveau jeu
-        val utilisateur = intent.getSerializableExtra("utilisateur") as? Utilisateur // récupérer l'utilisateur
+        jeu = Jeu(1,utilisateur!!.id, mot!!, false,0 )
+
         if (utilisateur == null) {
             Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
             finish()
             return
-        }// récupérer l'utilisateur
+        }
 
-        // ici on va chercher ou générer le mot et la description
-        val mot = choisirMot(theme, difficulte) // chercher ou générer le mot baseado no tema e dificuldade
-        val description = "descripcion_exemple" // chercher ou générer la description baseado no tema e dificuldade
-
-        //jeu = Jeu(utilisateur, theme ?: "defaultTheme", mot, description, difficulte ?: "defaultDifficulte") // créer un nouveau jeu
 
        // binding.txtDescription.text = jeu.description // afficher la description
 
@@ -76,7 +75,7 @@ class JeuActivity : AppCompatActivity() {
             val intent = Intent(this, JeuActivity::class.java)
            // intent.putExtra("utilisateur", jeu.utilisateur)
           //  intent.putExtra("theme", jeu.theme)
-            intent.putExtra("difficulte", jeu.niveauDifficulte)
+            intent.putExtra("difficulte", jeu.mot.niveauDifficulte)
             startActivity(intent)
             finish()
         }
@@ -108,7 +107,7 @@ class JeuActivity : AppCompatActivity() {
     }
 
     // Choisir un mot selon le thème et la difficulté
-   /* private fun choisirMot(theme: String?, difficulte: String?): String {
+  /* private fun choisirMot(theme: String?, difficulte: String?): String {
         val mots = mapOf(
             "Animaux" to mapOf( // Le map est utilisé pour associer le thème à la difficulté et à la liste de mots
                 "Facile" to listOf("lion"), // 4 letras
@@ -130,21 +129,12 @@ class JeuActivity : AppCompatActivity() {
                 "Moyen" to listOf("Mercedes"), // 8 letras
                 "Difficile" to listOf("Lamborghini") // 11 letras
             ),
-        )*/
+        )
+
+*/
 
 
 
-
-
-        // mot par défaut si le thème ou la difficulté n'est pas trouvé
-        val motParDefaut = "girafe"
-        val motsThemeDifficulte = mots[theme]?.get(difficulte)
-        return if (motsThemeDifficulte != null && motsThemeDifficulte.isNotEmpty()) {
-            motsThemeDifficulte.random() // choisir un mot aléatoire
-        } else {
-            motParDefaut
-        }
-    }
 
     // Créer les vues des lettres
     private fun creerVuesLettres() {
@@ -187,14 +177,14 @@ class JeuActivity : AppCompatActivity() {
                 val intent = Intent(this, ResultatActivity::class.java)
                 intent.putExtra("resultat", "victoire")
                 intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
-               // intent.putExtra("mot", jeu.mot)
+               intent.putExtra("mot", jeu.mot.mot)
                 startActivity(intent)
                 finish()
             }, 2000)
 
         } else if (jeu.lettresIncorrectes.size == 10) {
             jeu.resultat = false
-            Toast.makeText(this, "Tu as perdu! le mot était ${jeu.mot}.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Tu as perdu! le mot était ${jeu.mot.mot}.", Toast.LENGTH_SHORT).show()
             finirJeu()
         }
     }
