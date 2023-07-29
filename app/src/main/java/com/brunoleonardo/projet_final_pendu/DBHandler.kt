@@ -1,6 +1,7 @@
 package com.brunoleonardo.projet_final_pendu
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -169,28 +170,28 @@ class DBHandler(context: Context) :
 
     fun chercherParMot(mot: String): Mot? {
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM ${Constantes.TABLE_JEU} WHERE ${Constantes.ATTRIBUT_MOT_MOT} = $mot"
-        val cursor = db.rawQuery(selectQuery, null)
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_MOT} = ?" // verifique se a tabela está correta aqui
+        val cursor = db.rawQuery(selectQuery, arrayOf(mot))
         val res = cursor.moveToFirst()
-        var mot : Mot? = null
+        var foundMot : Mot? = null
         if(res){
             val id = cursor.getInt(0)
             val motJeu = cursor.getString(1)
             val description = cursor.getString(2)
             val theme = cursor.getString(3)
             val niveauDifficulte = cursor.getString(4)
-            mot = Mot(id, motJeu, description, theme, niveauDifficulte)
+            foundMot = Mot(id, motJeu, description, theme, niveauDifficulte)
         }
         cursor.close()
         db.close()
-        return mot
+        return foundMot
     }
 
     fun chercherMotParTheme(Theme : String) : ArrayList<Mot> {
         val motList: ArrayList<Mot> = ArrayList()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = $Theme"
-        val cursor = db.rawQuery(selectQuery, null)
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = ?"
+        val cursor = db.rawQuery(selectQuery, arrayOf(Theme))
         val res = cursor.moveToFirst()
         if(res){
             do {
@@ -210,8 +211,8 @@ class DBHandler(context: Context) :
 
     fun chercherMotParId(Id : Int): Mot? {
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_ID} = $Id"
-        val cursor = db.rawQuery(selectQuery, null)
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_ID} = ?"
+        val cursor = db.rawQuery(selectQuery, arrayOf(Id.toString()))
         val res = cursor.moveToFirst()
         var mot : Mot? = null
         if(res){
@@ -253,17 +254,29 @@ class DBHandler(context: Context) :
     }
 
 
-    fun ajouterMot(mot: Mot) {
+
+    fun ajouterMot(mot: Mot) : Boolean {
         val db = this.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(Constantes.ATTRIBUT_MOT_MOT, mot.mot)
-        contentValues.put(Constantes.ATTRIBUT_MOT_DESCRIPTION, mot.description)
-        contentValues.put(Constantes.ATTRIBUT_MOT_THEME, mot.theme)
-        contentValues.put(Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE, mot.niveauDifficulte)
 
-        db.insert(Constantes.TABLE_MOT, null, contentValues)
+        db.beginTransaction()  // Début de la transaction
+        try {
+            val contentValues = ContentValues()
 
-        db.close()
+            contentValues.put(Constantes.ATTRIBUT_MOT_MOT, mot.mot)
+            contentValues.put(Constantes.ATTRIBUT_MOT_DESCRIPTION, mot.description)
+            contentValues.put(Constantes.ATTRIBUT_MOT_THEME, mot.theme)
+            contentValues.put(Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE, mot.niveauDifficulte)
+
+            val result = db.insert(Constantes.TABLE_MOT, null, contentValues)
+            db.setTransactionSuccessful()  // Marquer cette transaction comme réussie
+            return !result.equals(-1)
+        } catch (e: Exception) {
+            Log.d(TAG, "Erreur lors de la tentative d'ajout du mot à la base de données")
+        } finally {
+            db.endTransaction()  // Fin de la transaction
+            db.close()  // Fermer la base de données
+        }
+        return false
     }
 
     fun modifierMot(mot: Mot) {
@@ -279,11 +292,12 @@ class DBHandler(context: Context) :
         db.close()
     }
 
-    fun supprimerMot(mot: Mot) {
+    fun supprimerMot(id: Int) {
         val db = this.writableDatabase
-        db.delete(Constantes.TABLE_MOT, "${Constantes.ATTRIBUT_MOT_ID} = ?", arrayOf(mot.id.toString()))
+        db.delete(Constantes.TABLE_MOT, "${Constantes.ATTRIBUT_MOT_ID} = ?", arrayOf(id.toString()))
         db.close()
     }
+
 
     fun supprimerToutMot() {
         val db = this.writableDatabase

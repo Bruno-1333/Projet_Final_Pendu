@@ -27,10 +27,11 @@
 
     // Activity Admin
     <string name="txtMot">Bienvenue dans la section administrateur</string>
-    <string name="btnAjouterMot">Ajouter</string>
-    <string name="btnAfficherMot">Consulter</string>
-    <string name="btnModifierMot">Modifier</string>
-    <string name="btnSupprimerMot">Supprimer</string>
+    <string name="btnAjouterMot">Ajouter Mot</string>
+    <string name="btnAfficherMot">Consulter Mot</string>
+    <string name="btnSupprimerMot">Supprimer Mot</string>
+    <string name="btnConsulterUtilisateur">Consulter Utilisateur</string>
+    <string name="btnSupprimerUtilisateur">Supprimer Utilisateur</string>
 
     <string name="btnSortir">Sortir</string>
 
@@ -50,6 +51,24 @@
     <string name="btnDifficile">Difficile</string>
 
     <string name="btnEnregistrerMot">Ajouter</string>
+
+    // Activity Consulter Mot
+    <string name="btnChercherParMot">Chercher par mot</string>
+    <string name="btnChercherParTheme">Chercher par theme</string>
+    <string name="btnChercherParId">Chercher par id</string>
+    <string name="btnChercherParNiveau">Chercher par niveau</string>
+
+    <string name= "txtChercherParMot">Chercher par mot</string>
+    <string name= "txtChercherParTheme">Chercher par theme</string>
+    <string name= "txtChercherParId">Chercher par id</string>
+    <string name= "txtChercherParNiveau">Chercher par niveau</string>
+
+    // Activity Supprimer Mot
+  <string name="txtSupprimerMot">Supprimer un mot</string>
+  <string name="txtSupprimerMotId">Id du mot a supprimer</string>
+
+
+
 
 
 </resources>

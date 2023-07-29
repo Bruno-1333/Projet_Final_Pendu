@@ -5,58 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtNiveauDifficulte"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="10dp"
-        android:text="@string/txtNiveauMot"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <ImageButton
+        android:id="@+id/menu_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_menu_open_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
-
-    <EditText
-        android:id="@+id/edtDescriptionMot"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="@string/txtDescriptionMot"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtMot" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtMot"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
         android:ems="10"
         android:inputType="text"
         android:text="@string/txtAjouterMot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/menu_back" />
+
+    <EditText
+        android:id="@+id/edtDescriptionMot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/txtDescriptionMot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtMot" />
+
+    <TextView
+        android:id="@+id/txtTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/txtThemeMot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtDescriptionMot" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtDescriptionMot">
+        app:layout_constraintTop_toBottomOf="@+id/txtTheme">
 
         <RadioButton
             android:id="@+id/radioBtnAnimaux"
@@ -83,62 +88,55 @@
             android:text="@string/radioBtnVoiture" />
     </RadioGroup>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/txtNiveauDifficulte"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:text="@string/txtNiveauMot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
-        <RadioGroup
+    <RadioGroup
+        android:id="@+id/radioGroupNiveau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNiveauDifficulte">
+
+        <RadioButton
+            android:id="@+id/radioBtnFacile"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:text="@string/radioBtnFacile" />
 
-            <RadioButton
-                android:id="@+id/radioBtnFacile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/radioBtnFacile" />
+        <RadioButton
+            android:id="@+id/radioBtnMoyen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/radioBtnMoyen" />
 
-            <RadioButton
-                android:id="@+id/radioBtnMoyen"
-                android:layout_width="155dp"
-                android:layout_height="wrap_content"
-                android:text="@string/radioBtnMoyen" />
-
-            <RadioButton
-                android:id="@+id/radioBtnDifficile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/radioBtnDifficile" />
-        </RadioGroup>
-
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/radioBtnDifficile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/radioBtnDifficile" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/btnEnregistrer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:text="@string/btnEnregistrerMot"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="651dp" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupNiveau" />
 
-    <TextView
-        android:id="@+id/txtTheme"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:text="@string/txtThemeMot"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtDescriptionMot" />
 </androidx.constraintlayout.widget.ConstraintLayout>
