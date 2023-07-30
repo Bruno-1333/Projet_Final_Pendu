@@ -32,6 +32,7 @@
     <string name="btnSupprimerMot">Supprimer Mot</string>
     <string name="btnConsulterUtilisateur">Consulter Utilisateur</string>
     <string name="btnSupprimerUtilisateur">Supprimer Utilisateur</string>
+    <string name="btnAjouterUtilisateur">Ajouter Utilisateur</string>
 
     <string name="btnSortir">Sortir</string>
 
@@ -58,17 +59,18 @@
     <string name="btnChercherParId">Chercher par id</string>
     <string name="btnChercherParNiveau">Chercher par niveau</string>
 
-    <string name= "txtChercherParMot">Chercher par mot</string>
-    <string name= "txtChercherParTheme">Chercher par theme</string>
-    <string name= "txtChercherParId">Chercher par id</string>
-    <string name= "txtChercherParNiveau">Chercher par niveau</string>
+    <string name="txtChercherParMot">Chercher par mot</string>
+    <string name="txtChercherParTheme">Chercher par theme</string>
+    <string name="txtChercherParId">Chercher par id</string>
+    <string name="txtChercherParNiveau">Chercher par niveau</string>
 
     // Activity Supprimer Mot
-  <string name="txtSupprimerMot">Supprimer un mot</string>
-  <string name="txtSupprimerMotId">Id du mot a supprimer</string>
+    <string name="txtSupprimerMot">Supprimer un mot</string>
+    <string name="txtSupprimerMotId">Id du mot a supprimer</string>
 
-
-
+    // Activity Consulter Utilisateur
+    <string name="btnChercherAdmParUtilisateur">Chercher par utilisateur</string>
+    <string name="btnChercherAdmParId">Chercher par utilisateur Id</string>
 
 
 </resources>

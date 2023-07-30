@@ -14,25 +14,41 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Ajouter les mots
         binding.btnAjouter.setOnClickListener {
             val intent = Intent(this, AjouterActivity::class.java)
             startActivity(intent)
         }
 
+        // Consulter les mots
         binding.btnConsulter.setOnClickListener {
             val intent = Intent(this, ConsulterActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnModifier.setOnClickListener {
-            val intent = Intent(this, ModifierActivity::class.java)
-            startActivity(intent)
-        }
-
+        // Supprimer les mots
         binding.btnSupprimer.setOnClickListener {
             val intent = Intent(this, SupprimerActivity::class.java)
             startActivity(intent)
         }
+
+      /*  // Ajouter les utilisateurs
+        binding.btnEnregistrerUtilisateur.setOnClickListener {
+            val intent = Intent(this, EnregistrerUtilisateurAdminActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de adicionar usuários
+            startActivity(intent)
+        }*/
+
+        // Consulter les utilisateurs
+        binding.btnConsulterUtilisateur.setOnClickListener {
+            val intent = Intent(this, ConsulterUtilisateurActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de consultar usuários
+            startActivity(intent)
+        }
+
+      /*  // Supprimer les utilisateurs
+        binding.btnSupprimerUtilisateur.setOnClickListener {
+            val intent = Intent(this, SupprimerUtilisateurActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de suprimir usuários
+            startActivity(intent)
+        }*/
     }
 
     // Capturar o evento de clique do item de menu
@@ -48,4 +64,5 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 }
+
 
