@@ -1,13 +1,12 @@
 package com.brunoleonardo.projet_final_pendu
 
-import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
-import android.widget.SimpleAdapter
+import androidx.appcompat.app.AppCompatActivity
+import com.brunoleonardo.projet_final_pendu.R
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityResultatBinding
 
 class ResultatActivity : AppCompatActivity() {
@@ -25,8 +24,8 @@ class ResultatActivity : AppCompatActivity() {
         val victories = intent.getIntExtra("victoires", 0)
 
         // Suponha que os dados do usuário são esses:
-        val user = "Utilisateur 1"
-        val victoriesText = "5 victoires"
+        val user = obtenirUtilisateurActuelDeBaseDeDonnees()
+        val victoriesText = "$victories vitórias"
 
         val data = listOf(user, victoriesText)
 
@@ -42,32 +41,32 @@ class ResultatActivity : AppCompatActivity() {
     }
 
     // Substitua isso com os dados reais do usuário do seu banco de dados
-    /*
-    fun getCurrentUserFromDatabase(): String {
+    fun obtenirUtilisateurActuelDeBaseDeDonnees(): String {
         // Retorna o nome do usuário atual
+        return "nome_do_usuario" // Substitua isso com a implementação real que busca os dados do banco de dados
     }
 
-    fun getVictoriesForUser(user: String): String {
+    fun obtenirVictoiresPourUtilisateur(user: String): String {
         // Retorna a contagem de vitórias para o usuário
+        return "10" // Substitua isso com a implementação real que busca os dados do banco de dados
     }
-    */
 
     // Inflar o menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflar o menu; isso adiciona itens à barra de ação, se estiver presente.
-        menuInflater.inflate(com.brunoleonardo.projet_final_pendu.R.menu.menu_jeu, menu)
+        menuInflater.inflate(R.menu.menu_jeu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            com.brunoleonardo.projet_final_pendu.R.id.action_retour -> {
+            R.id.action_retour -> {
                 val intent = Intent(this, PanneauJeuActivity::class.java)
                 startActivity(intent)
                 finish()
                 true
             }
-            com.brunoleonardo.projet_final_pendu.R.id.action_sortir -> {
+            R.id.action_sortir -> {
                 finishAffinity()
                 true
             }
@@ -75,6 +74,7 @@ class ResultatActivity : AppCompatActivity() {
         }
     }
 }
+
 
 
 

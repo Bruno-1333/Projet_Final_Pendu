@@ -1,21 +1,21 @@
+
 package com.brunoleonardo.projet_final_pendu
 
 import java.io.Serializable
-
-// Créer une classe Jeu
 
 class Jeu(
     var id: Int,
     var utilisateurId: Int,
     var mot: Mot,
-
     var resultat: Boolean = false,
-    var vuesLettresString: String = "",
-    var lettresIncorrectesString: String = "",
+    vuesLettresInit: String,
+    lettresIncorrectesInit: String,
     var victories: Int = 0,
 ) : Serializable {
 
-    // Creesr un constructeur secondaire pour le jeu
+    var vuesLettres: MutableList<Char> = vuesLettresInit.toMutableList()
+    var lettresIncorrectes: MutableList<Char> = lettresIncorrectesInit.toMutableList()
+
     constructor(
         id: Int,
         utilisateurId: Int,
@@ -27,59 +27,47 @@ class Jeu(
         utilisateurId,
         mot,
         resultat,
-        "",
+        "_".repeat(mot.mot.length), // Aqui preenchemos a palavra com sublinhados
         "",
         victories,
     )
-
-    val vuesLettres: MutableList<Char>
-        get() = vuesLettresString.toMutableList()
-
-    val lettresIncorrectes: MutableList<Char>
-        get() = lettresIncorrectesString.toMutableList()
 
     override fun toString(): String {
         return "Jeu(utilisateurId=$utilisateurId\n" +
                 " mot='$mot'\n" +
                 " resultat=$resultat\n" +
                 " vuesLettres=$vuesLettres\n" +
-                " lettresIncorrectes=$lettresIncorrectes)"+
+                " lettresIncorrectes=$lettresIncorrectes)" +
                 " victories=$victories)"
     }
 
-    // Fonction pour deviner une lettre et retourner un boolean si la lettre est dans le mot ou pas et mettre à jour les variables du jeu.
     fun devinerLettre(letter: Char): Boolean {
-        // Si la lettre a déjà été entrée, on ne fait rien
         if (vuesLettres.contains(letter) || lettresIncorrectes.contains(letter)) {
             return false
         }
 
-        if (mot.mot.contains(letter, ignoreCase = true)) { // si la lettre est dans le mot on remplace les _ par la lettre
+        if (mot.mot.contains(letter, ignoreCase = true)) {
             mot.mot.forEachIndexed { index, motLetter ->
                 if (motLetter.equals(letter, ignoreCase = true)) {
                     vuesLettres[index] = letter.toLowerCase()
                 }
             }
             return true
-        } else { // si la lettre n'est pas dans le mot on l'ajoute dans lettresIncorrectes
+        } else {
             lettresIncorrectes.add(letter)
             return false
         }
     }
 
-
-    // Fonction pour vérifier si le jeu est fini et mettre à jour les variables du jeu.
-    fun isGameOver(): Boolean { // si le nombre de lettres incorrectes est supérieur à 10, le jeu est fini
-        return !vuesLettres.any { it == '_' }
+    fun isGameOver(): Boolean {
+        return vuesLettres.none { it == '_' } // Retorna verdadeiro se não houver nenhum '_' na lista vuesLettres, o que significa que todas as letras foram adivinhadas
     }
 
-    // Fonction pour vérifier si le jeu est gagné et mettre à jour les variables du jeu.
-    fun reJouer() { // remettre les variables du jeu à leur valeur initiale
+    fun reJouer() {
         lettresIncorrectes.clear()
         vuesLettres.fill('_')
     }
 
-    // Fonction pour varifier la quantité de victoires
     fun incrementVictories() {
         victories++
     }

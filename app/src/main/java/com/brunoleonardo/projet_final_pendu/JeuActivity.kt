@@ -15,7 +15,9 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityJeuBinding
 import java.util.Locale
 
@@ -31,7 +33,7 @@ class JeuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Récupération des données de l'activité précédente (PanneauJeuActivity)
-       val dbHandler = DBHandler(this) // Ouverture de la base de données
+        val dbHandler = DBHandler(this) // Ouverture de la base de données
         val motid = intent.getIntExtra("motid", -1) // Récupérer l'ID du mot
         val mot = dbHandler.chercherMotParId(motid) // Récupérer le mot
         val utilisateurid = intent.getIntExtra("utilisateurId2", -1) // Récupérer l'ID de l'utilisateur
@@ -39,15 +41,13 @@ class JeuActivity : AppCompatActivity() {
 
         // Créer un nouveau jeu
         jeu = Jeu(1,utilisateur!!.id, mot!!, false,0 )
+        binding.txtDescription.text = jeu.mot.description // Adicione esta linha
 
         if (utilisateur == null) {
             Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-
-
-       // binding.txtDescription.text = jeu.description // afficher la description
 
         creerVuesLettres() // créer les vues des lettres
 
@@ -61,9 +61,9 @@ class JeuActivity : AppCompatActivity() {
                     } else {
                         miseAJourLettresIncorrectes()
                     }
-                    binding.txtSaissirLettre.setText("") // effacer le texte de la zone de texte
+                    binding.txtSaissirLettre.setText("") // Effacer le texte de la zone de texte
                 } else {
-                    Toast.makeText(this, "Vous deja utilise cette lettre!", Toast.LENGTH_SHORT).show() // afficher un message d'erreur
+                    Toast.makeText(this, "Você já utilizou essa letra!", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
                 }
             }
             verifierFinDePartie() // vérifier si la partie est terminée
@@ -72,18 +72,23 @@ class JeuActivity : AppCompatActivity() {
 
         // bouton pour rejouer le jeu avec le même utilisateur, thème et difficulté
         binding.btnRejouer.setOnClickListener {
-            val intent = Intent(this, JeuActivity::class.java)
-           // intent.putExtra("utilisateur", jeu.utilisateur)
-          //  intent.putExtra("theme", jeu.theme)
-            intent.putExtra("difficulte", jeu.mot.niveauDifficulte)
-            startActivity(intent)
-            finish()
+            val newWord = dbHandler.chercherNouveauMot(jeu.mot.id, jeu.mot.niveauDifficulte)
+            newWord?.let {
+                jeu = Jeu(1, jeu.utilisateurId, it, false, jeu.victories)
+                creerVuesLettres() // Créer les vues des lettres
+                miseAJourLettresDevinees() // Mettre à jour les lettres devinées
+                binding.txtMauvaisMot.text = ""
+                miseAJourImage(0)
+                binding.btnRejouer.visibility = View.INVISIBLE
+                binding.txtSaissirLettre.isEnabled = true
+                binding.btnEssayer.isEnabled = true
+            }
         }
 
         // Mettre à jour l'image du pendu
         miseAJourImage(0)
 
-        // Começa a contagem regressiva de 1 minutos (120000 ms)
+        // Começa a contagem regressiva de 1 minutos (60000 ms)
         timer = object: CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val remainingSeconds = millisUntilFinished / 1000
@@ -105,36 +110,6 @@ class JeuActivity : AppCompatActivity() {
         // Começa a contagem regressiva
         timer?.start()
     }
-
-    // Choisir un mot selon le thème et la difficulté
-  /* private fun choisirMot(theme: String?, difficulte: String?): String {
-        val mots = mapOf(
-            "Animaux" to mapOf( // Le map est utilisé pour associer le thème à la difficulté et à la liste de mots
-                "Facile" to listOf("lion"), // 4 letras
-                "Moyen" to listOf("panthère"), // 8 letras
-                "Difficile" to listOf("rhinocéros") // 10 letras
-            ),
-            "Pays" to mapOf(
-                "Facile" to listOf("Peru"), // 4 letras
-                "Moyen" to listOf("Portugal"), // 8 letras
-                "Difficile" to listOf("Afghanistan") // 11 letras
-            ),
-            "Instruments Musique" to mapOf(
-                "Facile" to listOf("harp"), // 4 letras
-                "Moyen" to listOf("trombone"), // 8 letras
-                "Difficile" to listOf("clavicémbalo") // 12 letras
-            ),
-            "Voitures" to mapOf(
-                "Facile" to listOf("Audi","Ford" ), // 4 letras
-                "Moyen" to listOf("Mercedes"), // 8 letras
-                "Difficile" to listOf("Lamborghini") // 11 letras
-            ),
-        )
-
-*/
-
-
-
 
     // Créer les vues des lettres
     private fun creerVuesLettres() {
@@ -165,27 +140,35 @@ class JeuActivity : AppCompatActivity() {
         miseAJourImage(jeu.lettresIncorrectes.size)
     }
 
-
     // Vérifier si la partie est terminée
-
     private fun verifierFinDePartie() {
         if (jeu.isGameOver()) {
             jeu.resultat = true
             jeu.incrementVictories() // Incrementer le nombre de victoires
-            Toast.makeText(this, "Vous avez gagne!", Toast.LENGTH_SHORT).show()
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(this, ResultatActivity::class.java)
-                intent.putExtra("resultat", "victoire")
-                intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
-               intent.putExtra("mot", jeu.mot.mot)
-                startActivity(intent)
-                finish()
-            }, 2000)
+
+            // Se o jogador é anônimo (não logado)
+            if (jeu.utilisateurId == -1) {
+                Toast.makeText(this, "Bravo, você ganhou!", Toast.LENGTH_SHORT).show()
+                binding.btnRejouer.visibility = View.VISIBLE // O botão "Rejouer" fica visível
+            }
+            // Se o jogador está logado
+            else {
+                Toast.makeText(this, "Vous avez gagne!", Toast.LENGTH_SHORT).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, ResultatActivity::class.java)
+                    intent.putExtra("resultat", "victoire")
+                    intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
+                    intent.putExtra("mot", jeu.mot.mot)
+                    startActivity(intent)
+                    finish()
+                }, 2000)
+            }
 
         } else if (jeu.lettresIncorrectes.size == 10) {
             jeu.resultat = false
             Toast.makeText(this, "Tu as perdu! le mot était ${jeu.mot.mot}.", Toast.LENGTH_SHORT).show()
             finirJeu()
+            return
         }
     }
 
@@ -194,37 +177,34 @@ class JeuActivity : AppCompatActivity() {
         // Cancela o timer para evitar que ele continue a funcionar após o jogo ter terminado
         timer?.cancel()
         binding.btnRejouer.visibility = View.VISIBLE
-        binding.btnEssayer.isEnabled = false
         binding.txtSaissirLettre.isEnabled = false
+        binding.btnEssayer.isEnabled = false
     }
 
-
-
-    // Mettre à jour l'image du pendu selon le nombre de lettres incorrectes
-    private fun miseAJourImage(nbrMauvaisesLettres: Int) {
-        val image = when (nbrMauvaisesLettres) {
-            0 -> R.drawable.img_default
-            1 -> R.drawable.img_01
-            2 -> R.drawable.img_02
-            3 -> R.drawable.img_03
-            4 -> R.drawable.img_04
-            5 -> R.drawable.img_05
-            6 -> R.drawable.img_06
-            7 -> R.drawable.img_07
-            8 -> R.drawable.img_08
-            9 -> R.drawable.img_09
-            10 -> R.drawable.img_10
-            else -> R.drawable.img_default
+    // Mettre à jour l'image du pendu
+    private fun miseAJourImage(nbrEssaies: Int) {
+        when (nbrEssaies) {
+            0 -> binding.zoneImgPendu.setImageResource(R.drawable.img_default)
+            1 -> binding.zoneImgPendu.setImageResource(R.drawable.img_01)
+            2 -> binding.zoneImgPendu.setImageResource(R.drawable.img_02)
+            3 -> binding.zoneImgPendu.setImageResource(R.drawable.img_03)
+            4 -> binding.zoneImgPendu.setImageResource(R.drawable.img_04)
+            5 -> binding.zoneImgPendu.setImageResource(R.drawable.img_05)
+            6 -> binding.zoneImgPendu.setImageResource(R.drawable.img_06)
+            7 -> binding.zoneImgPendu.setImageResource(R.drawable.img_07)
+            8 -> binding.zoneImgPendu.setImageResource(R.drawable.img_08)
+            9 -> binding.zoneImgPendu.setImageResource(R.drawable.img_09)
+            10 -> binding.zoneImgPendu.setImageResource(R.drawable.img_10)
         }
-        binding.zoneImgPendu.setImageResource(image)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflar o menu; isso adiciona itens à barra de ação, se estiver presente.
         menuInflater.inflate(R.menu.menu_jeu, menu)
         return true
     }
 
+    // A função onOptionsItemSelected deve estar aqui, dentro da classe
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_retour -> {
@@ -241,13 +221,18 @@ class JeuActivity : AppCompatActivity() {
         }
     }
 
+
+
+    // A função onDestroy deve estar aqui, dentro da classe
     override fun onDestroy() {
         super.onDestroy()
         // Cancela o timer para evitar que ele continue a funcionar após a atividade ter sido destruída
         timer?.cancel()
     }
-
 }
+
+
+
 
 
 

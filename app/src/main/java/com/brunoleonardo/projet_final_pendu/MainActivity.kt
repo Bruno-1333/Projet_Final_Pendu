@@ -1,11 +1,13 @@
 package com.brunoleonardo.projet_final_pendu
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivityMainBinding
 import java.io.Serializable
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,28 +52,20 @@ class MainActivity : AppCompatActivity() {
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
-            val utilisateur = dbHandler.chercherParUtilisateur(nomUtilisateur)
 
-
-
-            if(nomUtilisateur== Constantes.ATTRIBUT_ADMINISTRATEUR_UserNeme && motDePasse== Constantes.ATTRIBUT_ADMINISTRATEUR_MotDePasse){
-
+            if(nomUtilisateur == Constantes.ATTRIBUT_ADMINISTRATEUR_UserNeme && motDePasse == Constantes.ATTRIBUT_ADMINISTRATEUR_MotDePasse) {
                 val intent = Intent(this, AdminActivity::class.java)
                 startActivity(intent)
-
-            }else{
-
-                if (isValidUtilisateur(utilisateur, motDePasse)) {
+            } else {
+                if (dbHandler.loginUtilisateur(nomUtilisateur, motDePasse)) {
                     val intent = Intent(this, PanneauJeuActivity::class.java)
-                    intent.putExtra("utilisateurId", utilisateur!!.id)
+                    intent.putExtra("utilisateurId", dbHandler.obtenirIdUtilisateur(nomUtilisateur))
                     startActivity(intent)
-
                 } else {
                     Toast.makeText(this, "Utilisateur ou mot de passe invalide", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
 
 
         // button to access the game activity without registering
@@ -100,6 +94,14 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
+
+    fun faireConnexion(context: Context, nomUtilisateur: String) {
+        val sharedPreferences = context.getSharedPreferences("votre_nom_d_application_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("utilisateur_actuel", nomUtilisateur)
+        editor.apply()
+    }
+
 }
 
 

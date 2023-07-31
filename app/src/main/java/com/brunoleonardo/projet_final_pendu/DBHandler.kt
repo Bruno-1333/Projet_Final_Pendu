@@ -311,6 +311,33 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    fun chercherNouveauMot(exceptId: Int, niveauDifficulte: String): Mot? {
+        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_ID} != $exceptId AND ${Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE} = \"$niveauDifficulte\" ORDER BY RANDOM() LIMIT 1"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+
+        var mot: Mot? = null
+        if (cursor.moveToFirst()) {
+            val idIndex = cursor.getColumnIndex(Constantes.ATTRIBUT_MOT_ID)
+            val motIndex = cursor.getColumnIndex(Constantes.ATTRIBUT_MOT_MOT)
+            val descriptionIndex = cursor.getColumnIndex(Constantes.ATTRIBUT_MOT_DESCRIPTION)
+            val themeIndex = cursor.getColumnIndex(Constantes.ATTRIBUT_MOT_THEME)
+            val niveauDifficulteIndex = cursor.getColumnIndex(Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE)
+
+            if (idIndex != -1 && motIndex != -1 && descriptionIndex != -1 && themeIndex != -1 && niveauDifficulteIndex != -1) {
+                val id = cursor.getInt(idIndex)
+                val motText = cursor.getString(motIndex)
+                val description = cursor.getString(descriptionIndex)
+                val theme = cursor.getString(themeIndex)
+                val niveauDifficulte = cursor.getString(niveauDifficulteIndex)
+                mot = Mot(id, motText, description, theme, niveauDifficulte)
+            }
+        }
+        cursor.close()
+        return mot
+    }
+
+
     // Functions CRUD pour la table Jeu
 
     fun chercherJeu (): ArrayList<Jeu> {
@@ -366,6 +393,57 @@ class DBHandler(context: Context) :
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_JEU, "${Constantes.ATTRIBUT_JEU_ID} = ?", arrayOf(jeu.id.toString()))
         db.close()
+    }
+
+    // Methodes poue les resultats
+
+    fun obtenirUtilisateurActuelDeBaseDeDonnees(): String? {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} FROM ${Constantes.TABLE_UTILISATEUR} WHERE logado = 1 LIMIT 1", null)
+        if (cursor.moveToFirst()) {
+            val nomUtilisateur = cursor.getString(cursor.getColumnIndexOrThrow(Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR))
+            cursor.close()
+            return nomUtilisateur
+        } else {
+            cursor.close()
+            return null
+        }
+    }
+
+    fun obtenirVictoiresPourUtilisateur(nomUtilisateur: String): Int {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT SUM(${Constantes.ATTRIBUT_JEU_VICTOIRES}) FROM ${Constantes.TABLE_JEU} WHERE ${Constantes.ATTRIBUT_JEU_UTILISATEUR_ID} = (SELECT ${Constantes.ATTRIBUT_UTILISATEUR_ID} FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ?)", arrayOf(nomUtilisateur))
+        if (cursor.moveToFirst()) {
+            val victoires = cursor.getInt(0)
+            cursor.close()
+            return victoires
+        } else {
+            cursor.close()
+            return -1
+        }
+    }
+
+    // Método para verificar se o login do usuário é válido.
+    fun loginUtilisateur(nomUtilisateur: String, motDePasse: String): Boolean {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ? AND ${Constantes.ATTRIBUT_UTILISATEUR_MOT_DE_PASSE} = ?", arrayOf(nomUtilisateur, motDePasse))
+        val existe = cursor.moveToFirst()
+        cursor.close()
+        return existe
+    }
+
+
+    // Método para obter o ID do usuário com base no nome de usuário.
+    fun obtenirIdUtilisateur(nomUtilisateur: String): Int {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT ${Constantes.ATTRIBUT_UTILISATEUR_ID} FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ?", arrayOf(nomUtilisateur))
+        if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(Constantes.ATTRIBUT_UTILISATEUR_ID))
+            cursor.close()
+            return id
+        }
+        cursor.close()
+        return -1
     }
 
 }
