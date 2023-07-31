@@ -32,11 +32,11 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-      /*  // Ajouter les utilisateurs
+        // Ajouter les utilisateurs
         binding.btnEnregistrerUtilisateur.setOnClickListener {
             val intent = Intent(this, EnregistrerUtilisateurAdminActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de adicionar usuários
             startActivity(intent)
-        }*/
+        }
 
         // Consulter les utilisateurs
         binding.btnConsulterUtilisateur.setOnClickListener {
@@ -44,11 +44,11 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-      /*  // Supprimer les utilisateurs
+       // Supprimer les utilisateurs
         binding.btnSupprimerUtilisateur.setOnClickListener {
             val intent = Intent(this, SupprimerUtilisateurActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de suprimir usuários
             startActivity(intent)
-        }*/
+        }
     }
 
     // Capturar o evento de clique do item de menu

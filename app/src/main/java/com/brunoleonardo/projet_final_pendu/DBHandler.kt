@@ -144,6 +144,12 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    fun supprimmerToutesLesUtilisateurs() {
+        val db = this.writableDatabase
+        db.delete(Constantes.TABLE_UTILISATEUR, null, null)
+        db.close()
+    }
+
     // Functions CRUD pour la table Jeu
 
     fun chercherMots (): ArrayList<Mot> {
@@ -258,7 +264,7 @@ class DBHandler(context: Context) :
     fun ajouterMot(mot: Mot) : Boolean {
         val db = this.writableDatabase
 
-        db.beginTransaction()  // Début de la transaction
+        db.beginTransaction()
         try {
             val contentValues = ContentValues()
 
@@ -268,13 +274,13 @@ class DBHandler(context: Context) :
             contentValues.put(Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE, mot.niveauDifficulte)
 
             val result = db.insert(Constantes.TABLE_MOT, null, contentValues)
-            db.setTransactionSuccessful()  // Marquer cette transaction comme réussie
+            db.setTransactionSuccessful()
+
             return !result.equals(-1)
         } catch (e: Exception) {
-            Log.d(TAG, "Erreur lors de la tentative d'ajout du mot à la base de données")
+            Log.d(TAG, "Erro ao tentar adicionar a palavra ao banco de dados")
         } finally {
-            db.endTransaction()  // Fin de la transaction
-            db.close()  // Fermer la base de données
+            db.endTransaction()
         }
         return false
     }

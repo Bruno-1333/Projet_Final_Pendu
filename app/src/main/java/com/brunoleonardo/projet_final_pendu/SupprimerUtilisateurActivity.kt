@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.brunoleonardo.projet_final_pendu.databinding.ActivitySupprimerUtilisateurBinding
 
-/*class SupprimerUtilisateurActivity : AppCompatActivity() {
+class SupprimerUtilisateurActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySupprimerUtilisateurBinding
     private lateinit var adapter: ArrayAdapter<String>
 
@@ -23,7 +23,8 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivitySupprimerUtilisa
         val dbHandler = DBHandler(this)
 
         // Função de atualização do ArrayAdapter
-        fun updateAdapter(utilisateurs: List<Utilisateur>) {
+        fun updateAdapter() {
+            val utilisateurs = dbHandler.rechercheUtilisateurs()
             val formattedData = utilisateurs.map { "${it.id} - ${it.nomUtilisateur}" }
             adapter.clear()
             adapter.addAll(formattedData)
@@ -31,24 +32,29 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivitySupprimerUtilisa
         }
 
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
-        binding.listVIEWSupprimer.adapter = adapter
+        binding.ListViewSupprimerAdmUtilisateur.adapter = adapter
 
         // Carregar todos os 'utilisateurs' na lista ao abrir a atividade
-        val allUtilisateurs = dbHandler.chercherTousUtilisateurs()
-        updateAdapter(allUtilisateurs)
+        updateAdapter()
 
-        binding.btnSupprimerParId.setOnClickListener {
-            val idText = binding.editTxtSupprimerUtilisateur.text.toString()
+        binding.btnSupprimerAdmUtilisateur.setOnClickListener {
+            val idText = binding.editTxtSupprimerAdmUtilisateur.text.toString()
             val utilisateur = dbHandler.chercherUtilisateurParId(idText.toInt())
             if (utilisateur != null) {
                 dbHandler.supprimerUtilisateur(utilisateur)
-                val updatedUtilisateurs = dbHandler.chercherTousUtilisateurs()
-                updateAdapter(updatedUtilisateurs)
+                updateAdapter()
                 Toast.makeText(this, "Utilisateur supprimé", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
             }
-            binding.editTxtSupprimerUtilisateur.setText("")
+            binding.editTxtSupprimerAdmUtilisateur.setText("")
+        }
+
+        // Botão para supprimer todos os utilizadores
+        binding.btnSupprimerAdmTouteUtilisateur.setOnClickListener {
+            dbHandler.supprimmerToutesLesUtilisateurs()
+            updateAdapter()
         }
     }
-}*/
+}
+

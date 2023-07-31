@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-       /* val utilisateur = Utilisateur(1, "anonyme", "anonyme")
+        /*val utilisateur = Utilisateur(1, "anonyme", "anonyme")
        dbHandler.ajouterUtilisateur(utilisateur)*/
 
 

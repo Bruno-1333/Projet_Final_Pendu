@@ -10,6 +10,7 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityAjouterBinding
 
 class AjouterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAjouterBinding
+    private lateinit var dbHandler: DBHandler // Declaração da instância dbHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,13 +18,15 @@ class AjouterActivity : AppCompatActivity() {
         binding = ActivityAjouterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.menuBack.setOnClickListener {// Capturer l'événement de clic du bouton de retour
+        binding.menuBack.setOnClickListener {
             finish()
         }
 
+        dbHandler = DBHandler(this) // Inicialização de dbHandler
+
         binding.btnEnregistrer.setOnClickListener {
-            val mot = binding.edtMot.text.toString()
-            val description = binding.edtDescriptionMot.text.toString()
+            val mot = binding.edtMot.text.toString().trim()
+            val description = binding.edtDescriptionMot.text.toString().trim()
 
             val themeId = binding.radioGroup.checkedRadioButtonId
             val niveauId = binding.radioGroupNiveau.checkedRadioButtonId
@@ -44,7 +47,6 @@ class AjouterActivity : AppCompatActivity() {
                     else -> ""
                 }
 
-                val dbHandler = DBHandler(this)
                 val motObj = Mot(0, mot, description, theme, niveau)
                 dbHandler.ajouterMot(motObj)
 
@@ -59,4 +61,10 @@ class AjouterActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHandler.close() // Feche o banco de dados quando a atividade for destruída
+    }
 }
+
