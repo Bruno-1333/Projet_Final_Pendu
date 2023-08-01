@@ -13,26 +13,27 @@ class ResultatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultatBinding
 
+    // Crée l'activité
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)  // Configure a Toolbar como ActionBar
+        setSupportActionBar(binding.toolbar)  // Definit la barre d'outils
 
-        // obtenha o número de vitórias do usuário a partir do Intent
+        // obtenir les données de l'intent
         val victories = intent.getIntExtra("victoires", 0)
 
-        // Suponha que os dados do usuário são esses:
+        // obtenir le nom d'utilisateur actuel de la base de données
         val user = obtenirUtilisateurActuelDeBaseDeDonnees()
-        val victoriesText = "$victories vitórias"
+        val victoriesText = "$victories victoires"
 
         val data = listOf(user, victoriesText)
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data)
         binding.listResultat.adapter = adapter
 
-        // Adicione o ouvinte de clique ao botão Rejouer
+        // button "Rejouer"
         binding.btnRejouer.setOnClickListener {
             val intent = Intent(this, JeuActivity::class.java)
             startActivity(intent)
@@ -40,24 +41,25 @@ class ResultatActivity : AppCompatActivity() {
         }
     }
 
-    // Substitua isso com os dados reais do usuário do seu banco de dados
+    // Obtient le nom d'utilisateur actuel de la base de données
     fun obtenirUtilisateurActuelDeBaseDeDonnees(): String {
         // Retorna o nome do usuário atual
         return "nome_do_usuario" // Substitua isso com a implementação real que busca os dados do banco de dados
     }
 
+    // Obtient le nombre de victoires pour l'utilisateur
     fun obtenirVictoiresPourUtilisateur(user: String): String {
         // Retorna a contagem de vitórias para o usuário
         return "10" // Substitua isso com a implementação real que busca os dados do banco de dados
     }
 
-    // Inflar o menu
+    // Inflar le menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflar o menu; isso adiciona itens à barra de ação, se estiver presente.
         menuInflater.inflate(R.menu.menu_jeu, menu)
         return true
     }
 
+    // Gérer les clics sur les éléments du menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_retour -> {

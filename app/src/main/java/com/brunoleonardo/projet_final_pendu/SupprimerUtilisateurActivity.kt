@@ -10,19 +10,21 @@ class SupprimerUtilisateurActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySupprimerUtilisateurBinding
     private lateinit var adapter: ArrayAdapter<String>
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupprimerUtilisateurBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Definir o OnClickListener para o botão Voltar
+        //Deffinir la barre de menu
         binding.menuBack.setOnClickListener {
             finish()
         }
 
+        // DBHandler pour accéder à la base de données
         val dbHandler = DBHandler(this)
 
-        // Função de atualização do ArrayAdapter
+        // Function pour mettre à jour la liste des utilisateurs
         fun updateAdapter() {
             val utilisateurs = dbHandler.rechercheUtilisateurs()
             val formattedData = utilisateurs.map { "${it.id} - ${it.nomUtilisateur}" }
@@ -34,9 +36,10 @@ class SupprimerUtilisateurActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
         binding.ListViewSupprimerAdmUtilisateur.adapter = adapter
 
-        // Carregar todos os 'utilisateurs' na lista ao abrir a atividade
+        // Charger la liste des utilisateurs
         updateAdapter()
 
+        // botton pour supprimer un utilisateur
         binding.btnSupprimerAdmUtilisateur.setOnClickListener {
             val idText = binding.editTxtSupprimerAdmUtilisateur.text.toString()
             val utilisateur = dbHandler.chercherUtilisateurParId(idText.toInt())
@@ -50,7 +53,7 @@ class SupprimerUtilisateurActivity : AppCompatActivity() {
             binding.editTxtSupprimerAdmUtilisateur.setText("")
         }
 
-        // Botão para supprimer todos os utilizadores
+        // Botton pour supprimer tous les utilisateurs
         binding.btnSupprimerAdmTouteUtilisateur.setOnClickListener {
             dbHandler.supprimmerToutesLesUtilisateurs()
             updateAdapter()

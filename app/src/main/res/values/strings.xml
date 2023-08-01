@@ -109,7 +109,7 @@
     <string name="btnSupprimerToutMot">Supprimer tous les mots</string>
 
     // Activity Supprimer Utilisateur
-    <string name="btnSupprimerAdmUtilisateur">Supprimer un utilisateur</string>
+    <string name="btnSupprimerAdmUtilisateur">Supprimer un utilisateur par ID</string>
     <string name="btnSupprimerAdmTouteUtilisateur">Supprimer tous les utilisateurs</string>
     <string name="msg_utilisateur_supprime">Utilisateur supprimé</string>
     <string name="msg_utilisateur_non_trouve">Utilisateur non trouvé</string>

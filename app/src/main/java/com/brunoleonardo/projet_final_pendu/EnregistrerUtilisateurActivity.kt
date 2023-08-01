@@ -7,20 +7,22 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityEnregistrerUtili
 class EnregistrerUtilisateurActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEnregistrerUtilisateurBinding
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEnregistrerUtilisateurBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Definir o OnClickListener para o botão Voltar
+        // Definit le bouton "Retour"
         binding.menuBack.setOnClickListener {
             finish()
         }
 
+        // DBHandler pour accéder à la base de données
         val dbHandler = DBHandler(this)
 
 
-
+        // Enregistrer un utilisateur
         binding.btnEnregistrerUtilisateur.setOnClickListener {
 
             val nomUtilisateur = binding.editUtilisateurUser.text.toString()

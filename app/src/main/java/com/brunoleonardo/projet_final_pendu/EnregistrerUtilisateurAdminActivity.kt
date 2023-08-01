@@ -8,18 +8,21 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityEnregistrerUtili
 class EnregistrerUtilisateurAdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEnregistrerUtilisateurAdminBinding
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEnregistrerUtilisateurAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Definir o OnClickListener para o botão Voltar
+        // Deffinir la barre de menu
         binding.menuBack.setOnClickListener {
             finish()
         }
 
+        // DBHandler pour accéder à la base de données
         val dbHandler = DBHandler(this)
 
+        // Enregistrer un utilisateur
         binding.btnEnregistrerAdmUtilisateur.setOnClickListener {
             val nomUtilisateur = binding.editTxtNomAdmUtilisateur.text.toString().trim()
             val motDePasse = binding.editTxtMotPasseAdmUtilisateur.text.toString().trim()
@@ -40,7 +43,7 @@ class EnregistrerUtilisateurAdminActivity : AppCompatActivity() {
             dbHandler.ajouterUtilisateur(utilisateur)
             Toast.makeText(this, "Utilisateur enregistré", Toast.LENGTH_SHORT).show()
 
-            // Limpar os campos de entrada após o registro
+            // Effacer les champs
             binding.editTxtNomAdmUtilisateur.setText("")
             binding.editTxtMotPasseAdmUtilisateur.setText("")
         }

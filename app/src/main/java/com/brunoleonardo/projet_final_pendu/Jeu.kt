@@ -3,6 +3,7 @@ package com.brunoleonardo.projet_final_pendu
 
 import java.io.Serializable
 
+// Classe Jeu
 class Jeu(
     var id: Int,
     var utilisateurId: Int,
@@ -32,6 +33,7 @@ class Jeu(
         victories,
     )
 
+    // toString pour afficher les données du jeu
     override fun toString(): String {
         return "Jeu(utilisateurId=$utilisateurId\n" +
                 " mot='$mot'\n" +
@@ -41,6 +43,7 @@ class Jeu(
                 " victories=$victories)"
     }
 
+    // Fonction pour deviner une lettre
     fun devinerLettre(letter: Char): Boolean {
         if (vuesLettres.contains(letter) || lettresIncorrectes.contains(letter)) {
             return false
@@ -59,15 +62,18 @@ class Jeu(
         }
     }
 
+    // Fonction pour verifier si le jeu est fini
     fun isGameOver(): Boolean {
-        return vuesLettres.none { it == '_' } // Retorna verdadeiro se não houver nenhum '_' na lista vuesLettres, o que significa que todas as letras foram adivinhadas
+        return vuesLettres.none { it == '_' }
     }
 
+    // Fonction pour re-jouer
     fun reJouer() {
         lettresIncorrectes.clear()
         vuesLettres.fill('_')
     }
 
+    // Fonction pour incrementer les victoires
     fun incrementVictories() {
         victories++
     }

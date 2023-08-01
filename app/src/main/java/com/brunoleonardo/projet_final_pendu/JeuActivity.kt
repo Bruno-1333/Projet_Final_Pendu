@@ -27,6 +27,7 @@ class JeuActivity : AppCompatActivity() {
     private lateinit var jeu: Jeu
     private var timer: CountDownTimer? = null
 
+    // Créer l'activité
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJeuBinding.inflate(layoutInflater)
@@ -41,7 +42,7 @@ class JeuActivity : AppCompatActivity() {
 
         // Créer un nouveau jeu
         jeu = Jeu(1,utilisateur!!.id, mot!!, false,0 )
-        binding.txtDescription.text = jeu.mot.description // Adicione esta linha
+        binding.txtDescription.text = jeu.mot.description
 
         if (utilisateur == null) {
             Toast.makeText(this, getString(R.string.utilisateur_non_trouve), Toast.LENGTH_SHORT).show()
@@ -70,6 +71,7 @@ class JeuActivity : AppCompatActivity() {
             miseAJourLettresDevinees() // Mettre à jour les lettres devinées
         }
 
+
         // bouton pour rejouer le jeu avec le même utilisateur, thème et difficulté
         binding.btnRejouer.setOnClickListener {
             val newWord = dbHandler.chercherNouveauMot(jeu.mot.id, jeu.mot.niveauDifficulte)
@@ -82,32 +84,50 @@ class JeuActivity : AppCompatActivity() {
                 binding.btnRejouer.visibility = View.INVISIBLE
                 binding.txtSaissirLettre.isEnabled = true
                 binding.btnEssayer.isEnabled = true
+
+                // Reinicie o cronômetro
+                timer?.cancel()
+                timer = object: CountDownTimer(60000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        val remainingSeconds = millisUntilFinished / 1000
+                        val minutes = remainingSeconds / 60
+                        val seconds = remainingSeconds % 60
+
+                        binding.txtChronometre.text = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+                    }
+
+                    override fun onFinish() {
+                        // Le temps est écoulé. Désactivez l'écran et affichez l'image
+                        binding.txtChronometre.text = "00:00"
+                        binding.zoneImgPendu.setImageResource(R.drawable.img_10)
+                        finirJeu()
+                    }
+                }.start()
             }
         }
+
 
         // Mettre à jour l'image du pendu
         miseAJourImage(0)
 
-        // Começa a contagem regressiva de 1 minutos (60000 ms)
+        // Debut du chronomètre (60 secondes)
         timer = object: CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val remainingSeconds = millisUntilFinished / 1000
                 val minutes = remainingSeconds / 60
                 val seconds = remainingSeconds % 60
 
-                // Formata o tempo restante em "MM:SS" e atualiza o texto do TextView
+
                 binding.txtChronometre.text = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
             }
-
             override fun onFinish() {
-                // A contagem regressiva acabou. Desabilita a tela e mostra a imagem
                 binding.txtChronometre.text = "00:00"
                 binding.zoneImgPendu.setImageResource(R.drawable.img_10)
                 finirJeu()
             }
         }
 
-        // Começa a contagem regressiva
+
         timer?.start()
     }
 
@@ -144,22 +164,22 @@ class JeuActivity : AppCompatActivity() {
     private fun verifierFinDePartie() {
         if (jeu.isGameOver()) {
             jeu.resultat = true
-            jeu.incrementVictories() // Incrementer le nombre de victoires
+            jeu.incrementVictories()
 
-            // Se o jogador é anônimo (não logado)
-            if (jeu.utilisateurId == -1) {
+            if (jeu.utilisateurId == 1) {
                 Toast.makeText(this, getString(R.string.bravo_gagne), Toast.LENGTH_SHORT).show()
-                binding.btnRejouer.visibility = View.VISIBLE // O botão "Rejouer" fica visível
+                binding.btnRejouer.visibility = View.VISIBLE
             }
-            // Se o jogador está logado
             else {
                 Toast.makeText(this, getString(R.string.bravo_vous_gagne), Toast.LENGTH_SHORT).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, ResultatActivity::class.java)
-                    intent.putExtra("resultat", "victoire")
-                    intent.putExtra("victorie", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
+                    intent.putExtra("resultat", "victoires")
+                    intent.putExtra("victories", jeu.victories)
                     intent.putExtra("mot", jeu.mot.mot)
-                    startActivity(intent)
+                    if (jeu.utilisateurId != 1) {
+                        startActivity(intent)
+                    }
                     finish()
                 }, 2000)
             }
@@ -173,8 +193,8 @@ class JeuActivity : AppCompatActivity() {
     }
 
 
+    // Fin du jeu
     private fun finirJeu() {
-        // Cancela o timer para evitar que ele continue a funcionar após o jogo ter terminado
         timer?.cancel()
         binding.btnRejouer.visibility = View.VISIBLE
         binding.txtSaissirLettre.isEnabled = false
@@ -198,13 +218,13 @@ class JeuActivity : AppCompatActivity() {
         }
     }
 
-
+    // Créer le menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_jeu, menu)
         return true
     }
 
-    // A função onOptionsItemSelected deve estar aqui, dentro da classe
+  // Gérer les clics sur les éléments du menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_retour -> {
@@ -221,12 +241,9 @@ class JeuActivity : AppCompatActivity() {
         }
     }
 
-
-
-    // A função onDestroy deve estar aqui, dentro da classe
+    // Function onDestory pour arrêter le timer
     override fun onDestroy() {
         super.onDestroy()
-        // Cancela o timer para evitar que ele continue a funcionar após a atividade ter sido destruída
         timer?.cancel()
     }
 }

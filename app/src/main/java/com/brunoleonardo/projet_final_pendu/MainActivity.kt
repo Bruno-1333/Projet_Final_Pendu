@@ -13,12 +13,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val listMot = arrayListOf<Mot>()
+        /*val listMot = arrayListOf<Mot>()
         listMot.add(Mot("lion", "C'est un animal qui vit dans la forêt", "Animaux", "Facile"))
         listMot.add(Mot("panthère", "C'est un animal qui vit dans la forêt", "Animaux", "Moyen"))
         listMot.add(Mot("rhinocéros", "C'est un animal qui vit dans la forêt", "Animaux", "Difficile"))
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         listMot.add(Mot("Audi", "C'est une voiture de luxe", "Voitures", "Facile"))
         listMot.add(Mot("Ford", "C'est une voiture de luxe", "Voitures", "Facile"))
         listMot.add(Mot("Mercedes", "C'est une voiture de luxe", "Voitures", "Moyen"))
-        listMot.add(Mot("Lamborghini", "C'est une voiture de luxe", "Voitures", "Difficile"))
+        listMot.add(Mot("Lamborghini", "C'est une voiture de luxe", "Voitures", "Difficile"))*/
 
 
         // Ouverture de la base de données
@@ -39,16 +40,17 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        // Ajouter un utilisateur par défaut
         /*val utilisateur = Utilisateur(1, "anonyme", "anonyme")
        dbHandler.ajouterUtilisateur(utilisateur)*/
 
-
+        // supprimer tous les mots
        /* dbHandler.supprimerToutMot()
         for (mot in listMot) {
             dbHandler.ajouterMot(mot)
         }*/
 
-        // button to access the user registration activity
+        // Button pour accéder à l'activité de connexion
         binding.btnEntrerLogin.setOnClickListener {
             val nomUtilisateur = binding.txtUtilisateurLogin.text.toString()
             val motDePasse = binding.txtMotPasseLogin.text.toString()
@@ -73,17 +75,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        // button to access the game activity without registering
+        // button pour accéder à l'activité de jeu
         binding.btnJouerLogin.setOnClickListener {
-            // Create a default user
-
-
             val intent = Intent(this, PanneauJeuActivity::class.java)
             intent.putExtra("utilisateurId", 1)
             startActivity(intent)
         }
 
-        // button to access the user registration activity
+        // button pour accéder à l'activité d'enregistrement d'un utilisateur
         binding.btnEnregistrerUtilisateurLogin.setOnClickListener {
             val intent = Intent(this, EnregistrerUtilisateurActivity::class.java)
             startActivity(intent)
@@ -99,8 +98,6 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
-
-
 
 }
 

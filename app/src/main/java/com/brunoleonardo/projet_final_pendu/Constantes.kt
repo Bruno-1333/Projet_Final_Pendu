@@ -1,6 +1,7 @@
 
 package com.brunoleonardo.projet_final_pendu
 
+// Constantes de l'application
 object Constantes {
     // Utilisateur
     const val ATTRIBUT_UTILISATEUR_ID = "id"

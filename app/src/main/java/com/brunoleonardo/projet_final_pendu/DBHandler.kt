@@ -11,6 +11,7 @@ import android.widget.Toast
 class DBHandler(context: Context) :
     SQLiteOpenHelper(context, Constantes.NOM_BASE, null, Constantes.VERSION_BD) {
 
+    // Creer la base de donnees
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_UTILISATEUR_TABLE = ("CREATE TABLE ${Constantes.TABLE_UTILISATEUR}(" +
                 "${Constantes.ATTRIBUT_UTILISATEUR_ID} INTEGER PRIMARY KEY," +
@@ -33,14 +34,13 @@ class DBHandler(context: Context) :
                 "${Constantes.ATTRIBUT_MOT_THEME} TEXT, " +
                 "${Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE} TEXT)")
 
-
-
-
+        // Creation des tables
         db.execSQL(CREATE_UTILISATEUR_TABLE)
         db.execSQL(CREATE_JEU_TABLE)
         db.execSQL(CREATE_MOT_TABLE)
     }
 
+    // Mise a jour de la base de donnees
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS ${Constantes.TABLE_UTILISATEUR}")
         db.execSQL("DROP TABLE IF EXISTS ${Constantes.TABLE_JEU}")
@@ -50,10 +50,10 @@ class DBHandler(context: Context) :
 
     // Fonctions CRUD pour la table Utilisateur
 
+    // Ajouter un utilisateur
     fun rechercheUtilisateurs (): ArrayList<Utilisateur> {
         val utilisateurList: ArrayList<Utilisateur> = ArrayList()
         val db = this.readableDatabase
-
 
         val selectQuery = "SELECT * FROM ${Constantes.TABLE_UTILISATEUR}"
         val cursor = db.rawQuery(selectQuery, null)
@@ -77,6 +77,7 @@ class DBHandler(context: Context) :
         return utilisateurList
     }
 
+    // Chercher un utilisateur par son id
     fun chercherUtilisateurParId (Id : Int): Utilisateur? {
         val db = this.readableDatabase
         val selectQuery = "SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_ID} = $Id"
@@ -94,6 +95,7 @@ class DBHandler(context: Context) :
         return utilisateur
     }
 
+    // Chercher un utilisateur par son nom d'utilisateur
     fun chercherParUtilisateur(userName : String) : Utilisateur? {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ?", arrayOf(userName))
@@ -114,6 +116,7 @@ class DBHandler(context: Context) :
         return utilisateur
     }
 
+    // Ajouter un utilisateur
     fun ajouterUtilisateur(Utilisateur: Utilisateur) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -126,6 +129,7 @@ class DBHandler(context: Context) :
 
     }
 
+    // Modifier un utilisateur
     fun modifierUtilisateur(Utilisateur: Utilisateur) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -137,12 +141,14 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    // Supprimer un utilisateur
     fun supprimerUtilisateur(Utilisateur: Utilisateur) {
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_UTILISATEUR, "${Constantes.ATTRIBUT_UTILISATEUR_ID} = ?", arrayOf(Utilisateur.id.toString()))
         db.close()
     }
 
+    // Supprimer tous les utilisateurs
     fun supprimmerToutesLesUtilisateurs() {
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_UTILISATEUR, null, null)
@@ -151,6 +157,7 @@ class DBHandler(context: Context) :
 
     // Functions CRUD pour la table Jeu
 
+    // Ajouter un jeu
     fun chercherMots (): ArrayList<Mot> {
         val motList: ArrayList<Mot> = ArrayList()
         val db = this.readableDatabase
@@ -173,6 +180,7 @@ class DBHandler(context: Context) :
         return motList
     }
 
+    // Chercher un mot par son id
     fun chercherParMot(mot: String): Mot? {
         val db = this.readableDatabase
         val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_MOT} = ?" // verifique se a tabela está correta aqui
@@ -192,30 +200,7 @@ class DBHandler(context: Context) :
         return foundMot
     }
 
-    /*fun chercherMotsParThemeDifficulte(theme: String, difficulte: String): ArrayList<Mot> {
-        val motList: ArrayList<Mot> = ArrayList()
-        val db = this.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = ? AND ${Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE} = ?", arrayOf(theme, difficulte))
-
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getInt(0)
-                val motJeu = cursor.getString(1)
-                val description = cursor.getString(2)
-                val theme = cursor.getString(3)
-                val niveauDifficulte = cursor.getString(4)
-                val mot = Mot(id, motJeu, description, theme, niveauDifficulte)
-                motList.add(mot)
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-
-        return motList
-    }*/
-
+    // Chercher un mot par son id
 
     fun chercherMotParId(Id : Int): Mot? {
         val db = this.readableDatabase
@@ -236,7 +221,8 @@ class DBHandler(context: Context) :
         return mot
     }
 
-    // Dans votre classe DBHandler ou équivalent
+
+    // Chercher un mot par son theme et difficulte
     fun chercherMotsParThemeDifficulte(theme: String, difficulte: String): Mot? {
         val db = this.readableDatabase
         var mot : Mot? = null
@@ -261,8 +247,7 @@ class DBHandler(context: Context) :
         return mot
     }
 
-
-
+    // Chercher un mot par son theme
     fun ajouterMot(mot: Mot) : Boolean {
         val db = this.writableDatabase
 
@@ -286,6 +271,7 @@ class DBHandler(context: Context) :
         return false
     }
 
+    // Modifier un mot
     fun modifierMot(mot: Mot) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -299,19 +285,21 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    // Supprimer un mot
     fun supprimerMot(id: Int) {
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_MOT, "${Constantes.ATTRIBUT_MOT_ID} = ?", arrayOf(id.toString()))
         db.close()
     }
 
-
+    // Supprimer tous les mots
     fun supprimerToutMot() {
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_MOT, null, null)
         db.close()
     }
 
+    // Chercher un mot par son theme
     fun chercherNouveauMot(exceptId: Int, niveauDifficulte: String): Mot? {
         val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_ID} != $exceptId AND ${Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE} = \"$niveauDifficulte\" ORDER BY RANDOM() LIMIT 1"
         val db = this.readableDatabase
@@ -341,6 +329,7 @@ class DBHandler(context: Context) :
 
     // Functions CRUD pour la table Jeu
 
+    // Chercher un jeu par son id
     fun chercherJeu (): ArrayList<Jeu> {
         val jeuList: ArrayList<Jeu> = ArrayList()
         val db = this.readableDatabase
@@ -364,6 +353,7 @@ class DBHandler(context: Context) :
         return jeuList
     }
 
+    // Chercher un jeu par son id
     fun ajouterJeu(jeu: Jeu) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -377,6 +367,7 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    // Modifier un jeu
     fun modifierJue(jeu: Jeu) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -390,6 +381,7 @@ class DBHandler(context: Context) :
         db.close()
     }
 
+    // Supprimer un jeu
     fun supprimerJeu(jeu: Jeu) {
         val db = this.writableDatabase
         db.delete(Constantes.TABLE_JEU, "${Constantes.ATTRIBUT_JEU_ID} = ?", arrayOf(jeu.id.toString()))
@@ -398,6 +390,7 @@ class DBHandler(context: Context) :
 
     // Methodes poue les resultats
 
+    // Chercher un utilisateur actuel
     fun obtenirUtilisateurActuelDeBaseDeDonnees(): String? {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} FROM ${Constantes.TABLE_UTILISATEUR} WHERE logado = 1 LIMIT 1", null)
@@ -411,6 +404,7 @@ class DBHandler(context: Context) :
         }
     }
 
+    // obtenir le nombre de victoires pour un utilisateur
     fun obtenirVictoiresPourUtilisateur(nomUtilisateur: String): Int {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT SUM(${Constantes.ATTRIBUT_JEU_VICTOIRES}) FROM ${Constantes.TABLE_JEU} WHERE ${Constantes.ATTRIBUT_JEU_UTILISATEUR_ID} = (SELECT ${Constantes.ATTRIBUT_UTILISATEUR_ID} FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ?)", arrayOf(nomUtilisateur))
@@ -424,7 +418,7 @@ class DBHandler(context: Context) :
         }
     }
 
-    // Método para verificar se o login do usuário é válido.
+    // Verifier si un utilisateur cest valide
     fun loginUtilisateur(nomUtilisateur: String, motDePasse: String): Boolean {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ? AND ${Constantes.ATTRIBUT_UTILISATEUR_MOT_DE_PASSE} = ?", arrayOf(nomUtilisateur, motDePasse))
@@ -434,7 +428,7 @@ class DBHandler(context: Context) :
     }
 
 
-    // Método para obter o ID do usuário com base no nome de usuário.
+    // Obtenir un utilisateur par son id
     fun obtenirIdUtilisateur(nomUtilisateur: String): Int {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT ${Constantes.ATTRIBUT_UTILISATEUR_ID} FROM ${Constantes.TABLE_UTILISATEUR} WHERE ${Constantes.ATTRIBUT_UTILISATEUR_NOM_UTILISATEUR} = ?", arrayOf(nomUtilisateur))

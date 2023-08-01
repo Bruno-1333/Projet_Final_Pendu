@@ -9,12 +9,13 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityAdminBinding
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminBinding
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Definir o OnClickListener para o botão Voltar
+        // Deffinir la barre de menu
         binding.menuBack.setOnClickListener {
             finish()
         }
@@ -39,30 +40,30 @@ class AdminActivity : AppCompatActivity() {
 
         // Ajouter les utilisateurs
         binding.btnEnregistrerUtilisateur.setOnClickListener {
-            val intent = Intent(this, EnregistrerUtilisateurAdminActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de adicionar usuários
+            val intent = Intent(this, EnregistrerUtilisateurAdminActivity::class.java)
             startActivity(intent)
         }
 
         // Consulter les utilisateurs
         binding.btnConsulterUtilisateur.setOnClickListener {
-            val intent = Intent(this, ConsulterUtilisateurActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de consultar usuários
+            val intent = Intent(this, ConsulterUtilisateurActivity::class.java)
             startActivity(intent)
         }
 
        // Supprimer les utilisateurs
         binding.btnSupprimerUtilisateur.setOnClickListener {
-            val intent = Intent(this, SupprimerUtilisateurActivity::class.java) // Aqui você deve substituir pelo nome da sua Activity de suprimir usuários
+            val intent = Intent(this, SupprimerUtilisateurActivity::class.java)
             startActivity(intent)
         }
     }
 
-    // Capturar o evento de clique do item de menu
+    // Capturer le clic sur le bouton "Retour"
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            // Identificar o item de menu pelo ID
+            // Identifier le bouton "Retour"
             R.id.menu_back -> {
-                // Implementar o código para retornar à Activity_Admin
-                onBackPressed() // Essa chamada irá executar a lógica de retorno padrão (como pressionar o botão "Voltar")
+                // Implementer le code de retour
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

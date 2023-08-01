@@ -10,8 +10,9 @@ import com.brunoleonardo.projet_final_pendu.databinding.ActivityAjouterBinding
 
 class AjouterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAjouterBinding
-    private lateinit var dbHandler: DBHandler // Declaração da instância dbHandler
+    private lateinit var dbHandler: DBHandler // Declaration de dbHandler
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,8 +23,9 @@ class AjouterActivity : AppCompatActivity() {
             finish()
         }
 
-        dbHandler = DBHandler(this) // Inicialização de dbHandler
+        dbHandler = DBHandler(this) // initialisation de dbHandler
 
+        // Ajouter un mot
         binding.btnEnregistrer.setOnClickListener {
             val mot = binding.edtMot.text.toString().trim()
             val description = binding.edtDescriptionMot.text.toString().trim()
@@ -64,7 +66,7 @@ class AjouterActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        dbHandler.close() // Feche o banco de dados quando a atividade for destruída
+        dbHandler.close() // Fermer la connexion a la base de donnees
     }
 }
 

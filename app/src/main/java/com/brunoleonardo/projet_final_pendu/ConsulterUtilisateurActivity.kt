@@ -9,19 +9,21 @@ class ConsulterUtilisateurActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConsulterUtilisateurBinding
     private lateinit var adapter: ArrayAdapter<String>
 
+    // Creer l'activite
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConsulterUtilisateurBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Definir o OnClickListener para o botão Voltar
+        // Deffinition de la barre de menu
         binding.menuBack.setOnClickListener {
             finish()
         }
 
+        // Deffinition de la base de donnees
         val dbHandler = DBHandler(this)
 
-        // Função de atualização do ArrayAdapter
+        // Function pour mettre a jour l'adapteur
         fun updateAdapter(utilisateurs: List<Utilisateur>) {
             val formattedData = utilisateurs.map { "${it.nomUtilisateur}\n${it.motDePasse}" }
             adapter.clear()
@@ -32,10 +34,11 @@ class ConsulterUtilisateurActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
         binding.ListViewConsulterUtilisateur.adapter = adapter
 
-        // Carregar todos os 'utilisateurs' na lista ao abrir a atividade
+        // Charger tous les utilisateurs
         val allUtilisateurs = dbHandler.rechercheUtilisateurs()
         updateAdapter(allUtilisateurs)
 
+        // Chercher les utilisateurs
         binding.btnChercherAdmParUtilisateur.setOnClickListener {
             val utilisateurText = binding.editTxtChercherAdmParUtilisateur.text.toString()
             if (utilisateurText.isBlank()) {
@@ -48,6 +51,7 @@ class ConsulterUtilisateurActivity : AppCompatActivity() {
             }
         }
 
+        // Chercher les utilisateurs par id
         binding.btnChercherAdmParId.setOnClickListener {
             val idText = binding.txtChaercherAdmUitlisateurParId.text.toString()
             val utilisateur = dbHandler.chercherUtilisateurParId(idText.toInt())

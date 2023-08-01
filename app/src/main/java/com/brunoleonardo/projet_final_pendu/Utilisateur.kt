@@ -10,6 +10,7 @@ class Utilisateur(
 
 ) : Serializable
 {
+    // toString pour afficher les données de l'utilisateur
     override fun toString(): String {
         return "Utilisateur(" +
                 "id=$id \n" +

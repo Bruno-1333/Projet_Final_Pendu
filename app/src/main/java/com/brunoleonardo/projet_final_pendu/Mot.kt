@@ -26,6 +26,7 @@ import java.io.Serializable
         theme,
         niveauDifficulte
     )
+    // toString pour afficher les données du mot
     override fun toString(): String {
         return "Mot(id=$id, mot='$mot', description='$description', theme='$theme', niveauDifficulte='$niveauDifficulte')"
     }

@@ -27,6 +27,7 @@ class PanneauJeuActivity : AppCompatActivity() {
         val utlisateurId = intent.getIntExtra("utilisateurId", -1) // Récupérer l'ID de l'utilisateur
         val utilisateur = dbHandler.chercherUtilisateurParId(utlisateurId) // Récupérer l'utilisateur
 
+        // Theme et difficulte par defaut
         val themeButtons = mapOf(
             binding.imgBtnAnimaux to Triple("Animaux", R.drawable.img_animal_normal, R.drawable.img_animal_choisi),
             binding.imgBtnPays to Triple("Pays", R.drawable.img_pays_normal, R.drawable.img_pays_choisi),
