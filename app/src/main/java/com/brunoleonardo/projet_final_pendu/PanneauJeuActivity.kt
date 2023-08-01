@@ -28,7 +28,7 @@ class PanneauJeuActivity : AppCompatActivity() {
         val utilisateur = dbHandler.chercherUtilisateurParId(utlisateurId) // Récupérer l'utilisateur
 
         val themeButtons = mapOf(
-            binding.imgBtnAnimaux to Triple("Animal", R.drawable.img_animal_normal, R.drawable.img_animal_choisi),
+            binding.imgBtnAnimaux to Triple("Animaux", R.drawable.img_animal_normal, R.drawable.img_animal_choisi),
             binding.imgBtnPays to Triple("Pays", R.drawable.img_pays_normal, R.drawable.img_pays_choisi),
             binding.imgBtnInstumentsMusique to Triple("Musique", R.drawable.img_musique_normal, R.drawable.img_musique_choisi),
             binding.imgBtnVoitures to Triple("Voitures", R.drawable.img_voitures_normal, R.drawable.img_voitures_choisi)

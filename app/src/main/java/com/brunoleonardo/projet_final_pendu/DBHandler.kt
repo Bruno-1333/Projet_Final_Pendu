@@ -124,7 +124,6 @@ class DBHandler(context: Context) :
 
         db.close()
 
-       Log.v("test", "ajouté")
     }
 
     fun modifierUtilisateur(Utilisateur: Utilisateur) {
@@ -193,13 +192,13 @@ class DBHandler(context: Context) :
         return foundMot
     }
 
-    fun chercherMotParTheme(Theme : String) : ArrayList<Mot> {
+    /*fun chercherMotsParThemeDifficulte(theme: String, difficulte: String): ArrayList<Mot> {
         val motList: ArrayList<Mot> = ArrayList()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = ?"
-        val cursor = db.rawQuery(selectQuery, arrayOf(Theme))
-        val res = cursor.moveToFirst()
-        if(res){
+
+        val cursor = db.rawQuery("SELECT * FROM ${Constantes.TABLE_MOT} WHERE ${Constantes.ATTRIBUT_MOT_THEME} = ? AND ${Constantes.ATTRIBUT_MOT_NIVEAU_DIFFICULTE} = ?", arrayOf(theme, difficulte))
+
+        if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getInt(0)
                 val motJeu = cursor.getString(1)
@@ -210,10 +209,13 @@ class DBHandler(context: Context) :
                 motList.add(mot)
             } while (cursor.moveToNext())
         }
+
         cursor.close()
         db.close()
+
         return motList
-    }
+    }*/
+
 
     fun chercherMotParId(Id : Int): Mot? {
         val db = this.readableDatabase
@@ -278,7 +280,6 @@ class DBHandler(context: Context) :
 
             return !result.equals(-1)
         } catch (e: Exception) {
-            Log.d(TAG, "Erro ao tentar adicionar a palavra ao banco de dados")
         } finally {
             db.endTransaction()
         }

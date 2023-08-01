@@ -43,10 +43,10 @@ class MainActivity : AppCompatActivity() {
        dbHandler.ajouterUtilisateur(utilisateur)*/
 
 
-        dbHandler.supprimerToutMot()
+       /* dbHandler.supprimerToutMot()
         for (mot in listMot) {
             dbHandler.ajouterMot(mot)
-        }
+        }*/
 
         // button to access the user registration activity
         binding.btnEntrerLogin.setOnClickListener {
@@ -55,11 +55,15 @@ class MainActivity : AppCompatActivity() {
 
             if(nomUtilisateur == Constantes.ATTRIBUT_ADMINISTRATEUR_UserNeme && motDePasse == Constantes.ATTRIBUT_ADMINISTRATEUR_MotDePasse) {
                 val intent = Intent(this, AdminActivity::class.java)
+                binding.txtUtilisateurLogin.text.clear()
+                binding.txtMotPasseLogin.text.clear()
                 startActivity(intent)
             } else {
                 if (dbHandler.loginUtilisateur(nomUtilisateur, motDePasse)) {
                     val intent = Intent(this, PanneauJeuActivity::class.java)
                     intent.putExtra("utilisateurId", dbHandler.obtenirIdUtilisateur(nomUtilisateur))
+                    binding.txtUtilisateurLogin.text.clear()
+                    binding.txtMotPasseLogin.text.clear()
                     startActivity(intent)
                 } else {
                     Toast.makeText(this, getString(R.string.ToastUtilisateurNeExistePas), Toast.LENGTH_SHORT).show()
@@ -96,12 +100,7 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-   /* fun faireConnexion(context: Context, nomUtilisateur: String) {
-        val sharedPreferences = context.getSharedPreferences("votre_nom_d_application_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("utilisateur_actuel", nomUtilisateur)
-        editor.apply()
-    }*/
+
 
 }
 

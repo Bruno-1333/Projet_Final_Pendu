@@ -157,7 +157,7 @@ class JeuActivity : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, ResultatActivity::class.java)
                     intent.putExtra("resultat", "victoire")
-                    intent.putExtra("victories", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
+                    intent.putExtra("victorie", jeu.victories) // envoyer le nombre de victoires à l'activité de résultat
                     intent.putExtra("mot", jeu.mot.mot)
                     startActivity(intent)
                     finish()

@@ -105,7 +105,7 @@
     <string name="editUtilisateurMotPasse">Mot de passe</string>
 
     // Activity Supprimer
-    <string name="btnSupprimerMotId">Supprimer un mot</string>
+    <string name="btnSupprimerMotId">Supprimer un mot par ID</string>
     <string name="btnSupprimerToutMot">Supprimer tous les mots</string>
 
     // Activity Supprimer Utilisateur
@@ -113,6 +113,10 @@
     <string name="btnSupprimerAdmTouteUtilisateur">Supprimer tous les utilisateurs</string>
     <string name="msg_utilisateur_supprime">Utilisateur supprimé</string>
     <string name="msg_utilisateur_non_trouve">Utilisateur non trouvé</string>
+
+    // Activity Enregistrer UtilisateurAdmin
+
+    <string name="btnEnregistrerAdmUtilisateur">Enregistrer un utilisateur</string>
 
 
 

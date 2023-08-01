@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Projeto_Final_Forca</string>
+
+    // Main Activity
+    <string name="titre">Jogo da Forca</string>
+    <string name="txtUtilisateurLogin">Usuário</string>
+    <string name="txtMotPasseLogin">Senha</string>
+    <string name="btnEntrerLogin">Entrar</string>
+    <string name="btnJouerLogin">Jogar</string>
+    <string name="btnEnregistrerUtilisateurLogin">Registrar</string>
+    <string name="ToastUtilisateurNeExistePas">Usuário não existe</string>
+
+    // Activity Menu Jeu
+    <string name="txtBienvenue">Bem-vindo ao jogo da forca! Escolha um tema e seu nível de dificuldade. Boa sorte!</string>
+    <string name="radioBtnFacile">Fácil</string>
+    <string name="radioBtnMoyen">Médio</string>
+    <string name="radioBtnDifficile">Difícil</string>
+    <string name="btnJouer">Jogar</string>
+
+    // Activity Jeu
+    <string name="txtDescription">Descrição da Palavra</string>
+    <string name="txtChronometre">Cronômetro</string>
+    <string name="txtMauvaisMot">Palavra Errada</string>
+    <string name="txtSaissirLettre">Digite uma letra</string>
+    <string name="btnEssayer">Tentar</string>
+    <string name="btnRejouer">Jogar Novamente</string>
+
+    <string name="theme_animaux">Animais</string>
+    <string name="theme_pays">Países</string>
+    <string name="theme_musique">Música</string>
+    <string name="theme_voitures">Carros</string>
+
+    <string name="niveau_facile">Fácil</string>
+    <string name="niveau_moyen">Médio</string>
+    <string name="niveau_difficile">Difícil</string>
+
+    <string name="utilisateur_non_trouve">Usuário não encontrado</string>
+    <string name="deja_utilise_lettre">Você já usou essa letra!</string>
+    <string name="bravo_gagne">Parabéns, você ganhou!</string>
+    <string name="bravo_vous_gagne">Parabéns, você ganhou!</string>
+    <string name="vous_perdu">Você perdeu! A palavra era</string>
+
+    // Activity Panneau Jeu
+    <string name="aucun_mot_par_Theme_choisi">Nenhuma palavra encontrada para o tema e o nível de dificuldade escolhidos.</string>
+    <string name="selectionar_tehem_et_niveau">Por favor, selecione um tema e um nível de dificuldade.</string>
+
+    // Activity Admin
+    <string name="txtMot">Bem-vindo à seção administrativa</string>
+    <string name="btnAjouterMot">Adicionar Palavra</string>
+    <string name="btnAfficherMot">Consultar Palavra</string>
+    <string name="btnSupprimerMot">Excluir Palavra</string>
+    <string name="btnConsulterUtilisateur">Consultar Usuário</string>
+    <string name="btnSupprimerUtilisateur">Excluir Usuário</string>
+    <string name="btnAjouterUtilisateur">Adicionar Usuário</string>
+
+    <string name="btnSortir">Sair</string>
+
+    // Activity Ajouter Mot
+    <string name="txtAjouterMot">Adicionar uma palavra</string>
+    <string name="txtDescriptionMot">Descrição da Palavra</string>
+    <string name="txtThemeMot">Escolha um tema para a palavra</string>
+
+    <string name="radioBtnAnimaux">Animais</string>
+    <string name="radioBtnPays">Países</string>
+    <string name="radioBtnMusique">Instrumento de Música</string>
+    <string name="radioBtnVoiture">Marca de Carro</string>
+
+    <string name="txtNiveauMot">Escolha um nível de dificuldade</string>
+    <string name="btnFacile">Fácil</string>
+    <string name="btnMoyen">Médio</string>
+    <string name="btnDifficile">Difícil</string>
+
+    <string name="btnEnregistrerMot">Adicionar</string>
+
+    <string name="ToastMotAjour">Palavra adicionada com sucesso</string>
+    <string name="ToastRempMot">Preencha todos os campos</string>
+
+    // Activity Consulter Mot
+    <string name="btnChercherParMot">Pesquisar por palavra</string>
+    <string name="btnChercherParTheme">Pesquisar por tema</string>
+    <string name="btnChercherParId">Pesquisar por id</string>
+    <string name="btnChercherParNiveau">Pesquisar por nível</string>
+
+    <string name="txtChercherParMot">Pesquisar por palavra</string>
+    <string name="txtChercherParTheme">Pesquisar por tema</string>
+    <string name="txtChercherParId">Pesquisar por id</string>
+    <string name="txtChercherParNiveau">Pesquisar por nível</string>
+
+    // Activity Supprimer Mot
+    <string name="txtSupprimerMot">Excluir uma palavra</string>
+    <string name="txtSupprimerMotId">Id da palavra a ser excluída</string>
+
+    // Activity Consulter Utilisateur
+    <string name="btnChercherAdmParUtilisateur">Pesquisar por usuário</string>
+    <string name="btnChercherAdmParId">Pesquisar por Id de usuário</string>
+
+    // Activity Enregistrer Utilisateur
+    <string name="btnEnregistrerUtilisateur">Registrar um usuário</string>
+    <string name="editUtilisateurUser">Nome de usuário</string>
+    <string name="editUtilisateurMotPasse">Senha</string>
+
+    // Activity Supprimer
+    <string name="btnSupprimerMotId">Excluir uma palavra</string>
+    <string name="btnSupprimerToutMot">Excluir todas as palavras</string>
+
+    // Activity Supprimer Utilisateur
+    <string name="btnSupprimerAdmUtilisateur">Excluir um usuário</string>
+    <string name="btnSupprimerAdmTouteUtilisateur">Excluir todos os usuários</string>
+    <string name="msg_utilisateur_supprime">Usuário excluído</string>
+    <string name="msg_utilisateur_non_trouve">Usuário não encontrado</string>
+
+    // Activity Enregistrer UtilisateurAdmin
+
+    <string name="btnEnregistrerAdmUtilisateur">Registrar um usuario</string>
+
+</resources>
