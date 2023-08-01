@@ -7,5 +7,11 @@
 
     </style>
 
+    <style name="JeuPendu.Text" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="Theme.Projet_Final_Pendu" parent="Base.Theme.Projet_Final_Pendu" />
 </resources>

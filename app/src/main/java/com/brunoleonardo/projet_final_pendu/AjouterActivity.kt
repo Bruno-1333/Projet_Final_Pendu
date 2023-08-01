@@ -33,17 +33,17 @@ class AjouterActivity : AppCompatActivity() {
 
             if (mot.isNotEmpty() && description.isNotEmpty() && themeId != -1 && niveauId != -1) {
                 val theme = when (themeId) {
-                    R.id.radioBtnAnimaux -> "Animaux"
-                    R.id.radioBtnPays -> "Pays"
-                    R.id.radioBtnMusique -> "Musique"
-                    R.id.radioBtnVoitures -> "Voitures"
+                    R.id.radioBtnAnimaux -> getString(R.string.theme_animaux)
+                    R.id.radioBtnPays -> getString(R.string.theme_pays)
+                    R.id.radioBtnMusique -> getString(R.string.theme_musique)
+                    R.id.radioBtnVoitures -> getString(R.string.theme_voitures)
                     else -> ""
                 }
 
                 val niveau = when (niveauId) {
-                    R.id.radioBtnFacile -> "Facile"
-                    R.id.radioBtnMoyen -> "Moyen"
-                    R.id.radioBtnDifficile -> "Difficile"
+                    R.id.radioBtnFacile -> getString(R.string.niveau_facile)
+                    R.id.radioBtnMoyen -> getString(R.string.niveau_moyen)
+                    R.id.radioBtnDifficile -> getString(R.string.niveau_difficile)
                     else -> ""
                 }
 
@@ -55,9 +55,9 @@ class AjouterActivity : AppCompatActivity() {
                 binding.radioGroup.clearCheck()
                 binding.radioGroupNiveau.clearCheck()
 
-                Toast.makeText(this, "Mot adicionado com sucesso!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ToastMotAjour), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ToastRempMot), Toast.LENGTH_SHORT).show()
             }
         }
     }

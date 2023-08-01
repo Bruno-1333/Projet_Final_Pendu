@@ -69,21 +69,21 @@ class PanneauJeuActivity : AppCompatActivity() {
         // Gestion du bouton jouer
         binding.btnJouer.setOnClickListener {
             if (themeChoisi != null && difficulteChoisi != null) {
-                val selectedTheme = themeChoisi!! // Récupérer le thème choisi
-                val selectedDifficulty = difficulteChoisi!! // Récupérer la difficulté choisie
+                val selectedTheme = themeChoisi!!
+                val selectedDifficulty = difficulteChoisi!!
 
-                val mot = dbHandler.chercherMotsParThemeDifficulte(selectedTheme, selectedDifficulty) // Récupérer un mot aléatoire selon le thème et la difficulté choisis
+                val mot = dbHandler.chercherMotsParThemeDifficulte(selectedTheme, selectedDifficulty)
 
                 if(mot != null) {
-                    val intent = Intent(this, JeuActivity::class.java) // Créer une nouvelle activité
-                    intent.putExtra("motid", mot.id) // Envoyer le mot à l'activité
-                    intent.putExtra("utilisateurId2", utlisateurId) // Envoyer l'utilisateur à l'activité
+                    val intent = Intent(this, JeuActivity::class.java)
+                    intent.putExtra("motid", mot.id)
+                    intent.putExtra("utilisateurId2", utlisateurId)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this, "Aucun mot trouvé pour le thème et la difficulté choisis.", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
+                    Toast.makeText(this, getString(R.string.aucun_mot_par_Theme_choisi), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Veuillez sélectionner un thème et un niveau de difficulté.", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
+                Toast.makeText(this, getString(R.string.selectionar_tehem_et_niveau), Toast.LENGTH_SHORT).show()
             }
         }
     }

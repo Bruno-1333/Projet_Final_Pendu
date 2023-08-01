@@ -43,9 +43,9 @@ class SupprimerUtilisateurActivity : AppCompatActivity() {
             if (utilisateur != null) {
                 dbHandler.supprimerUtilisateur(utilisateur)
                 updateAdapter()
-                Toast.makeText(this, "Utilisateur supprimé", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msg_utilisateur_supprime), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.utilisateur_non_trouve), Toast.LENGTH_SHORT).show()
             }
             binding.editTxtSupprimerAdmUtilisateur.setText("")
         }

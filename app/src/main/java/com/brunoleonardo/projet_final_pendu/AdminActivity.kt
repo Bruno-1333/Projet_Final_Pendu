@@ -14,6 +14,11 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Definir o OnClickListener para o botão Voltar
+        binding.menuBack.setOnClickListener {
+            finish()
+        }
+
         // Ajouter les mots
         binding.btnAjouter.setOnClickListener {
             val intent = Intent(this, AjouterActivity::class.java)

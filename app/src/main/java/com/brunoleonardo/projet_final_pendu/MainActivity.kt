@@ -62,10 +62,11 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("utilisateurId", dbHandler.obtenirIdUtilisateur(nomUtilisateur))
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this, "Utilisateur ou mot de passe invalide", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.ToastUtilisateurNeExistePas), Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
 
 
         // button to access the game activity without registering
@@ -95,12 +96,12 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    fun faireConnexion(context: Context, nomUtilisateur: String) {
+   /* fun faireConnexion(context: Context, nomUtilisateur: String) {
         val sharedPreferences = context.getSharedPreferences("votre_nom_d_application_prefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("utilisateur_actuel", nomUtilisateur)
         editor.apply()
-    }
+    }*/
 
 }
 

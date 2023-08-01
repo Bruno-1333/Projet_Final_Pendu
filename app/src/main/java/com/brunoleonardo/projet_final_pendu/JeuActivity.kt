@@ -44,7 +44,7 @@ class JeuActivity : AppCompatActivity() {
         binding.txtDescription.text = jeu.mot.description // Adicione esta linha
 
         if (utilisateur == null) {
-            Toast.makeText(this, "Utilisateur non trouvé", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.utilisateur_non_trouve), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -63,7 +63,7 @@ class JeuActivity : AppCompatActivity() {
                     }
                     binding.txtSaissirLettre.setText("") // Effacer le texte de la zone de texte
                 } else {
-                    Toast.makeText(this, "Você já utilizou essa letra!", Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
+                    Toast.makeText(this, getString(R.string.deja_utilise_lettre), Toast.LENGTH_SHORT).show() // Afficher un message d'erreur
                 }
             }
             verifierFinDePartie() // vérifier si la partie est terminée
@@ -148,12 +148,12 @@ class JeuActivity : AppCompatActivity() {
 
             // Se o jogador é anônimo (não logado)
             if (jeu.utilisateurId == -1) {
-                Toast.makeText(this, "Bravo, você ganhou!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.bravo_gagne), Toast.LENGTH_SHORT).show()
                 binding.btnRejouer.visibility = View.VISIBLE // O botão "Rejouer" fica visível
             }
             // Se o jogador está logado
             else {
-                Toast.makeText(this, "Vous avez gagne!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.bravo_vous_gagne), Toast.LENGTH_SHORT).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, ResultatActivity::class.java)
                     intent.putExtra("resultat", "victoire")
@@ -166,7 +166,7 @@ class JeuActivity : AppCompatActivity() {
 
         } else if (jeu.lettresIncorrectes.size == 10) {
             jeu.resultat = false
-            Toast.makeText(this, "Tu as perdu! le mot était ${jeu.mot.mot}.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.vous_perdu), Toast.LENGTH_SHORT).show()
             finirJeu()
             return
         }

@@ -8,6 +8,8 @@
     <string name="btnEntrerLogin">Entrer</string>
     <string name="btnJouerLogin">Jouer</string>
     <string name="btnEnregistrerUtilisateurLogin">Enregistrer</string>
+    <string name="ToastUtilisateurNeExistePas">Utilisateur n\'existe pas</string>
+
 
 
     // Activity Menu Jeu
@@ -24,6 +26,26 @@
     <string name="txtSaissirLettre">Saissir une lettre</string>
     <string name="btnEssayer">Essayer</string>
     <string name="btnRejouer">Rejouer</string>
+
+    <string name="theme_animaux">Animaux</string>
+    <string name="theme_pays">Pays</string>
+    <string name="theme_musique">Musique</string>
+    <string name="theme_voitures">Voitures</string>
+
+    <string name="niveau_facile">Facile</string>
+    <string name="niveau_moyen">Moyen</string>
+    <string name="niveau_difficile">Difficile</string>
+
+    <string name="utilisateur_non_trouve">Utilisateur non trouvé</string>
+    <string name="deja_utilise_lettre">Vous avez déjà utilisé cette lettre !</string>
+    <string name="bravo_gagne">Bravo, vous avez gagné !</string>
+    <string name="bravo_vous_gagne">Bravo, vous avez gagné !</string>
+    <string name="vous_perdu">Vous avez perdu ! Le mot était</string>
+
+
+    // Activity Panneau Jeu
+    <string name="aucun_mot_par_Theme_choisi">Aucun mot trouvé pour le thème et le niveau de difficulté choisis.</string>
+    <string name="selectionar_tehem_et_niveau">Veuillez sélectionner un thème et un niveau de difficulté.</string>
 
     // Activity Admin
     <string name="txtMot">Bienvenue dans la section administrateur</string>
@@ -53,6 +75,11 @@
 
     <string name="btnEnregistrerMot">Ajouter</string>
 
+    <string name="ToastMotAjour">Mot ajouter avec succes</string>
+    <string name="ToastRempMot">Remplir tous les champs</string>
+
+
+
     // Activity Consulter Mot
     <string name="btnChercherParMot">Chercher par mot</string>
     <string name="btnChercherParTheme">Chercher par theme</string>
@@ -71,6 +98,23 @@
     // Activity Consulter Utilisateur
     <string name="btnChercherAdmParUtilisateur">Chercher par utilisateur</string>
     <string name="btnChercherAdmParId">Chercher par utilisateur Id</string>
+
+    // Activity Enregistrer Utilisateur
+    <string name="btnEnregistrerUtilisateur">Enregistrer un utilisateur</string>
+    <string name="editUtilisateurUser">Nom d\'utilisateur</string>
+    <string name="editUtilisateurMotPasse">Mot de passe</string>
+
+    // Activity Supprimer
+    <string name="btnSupprimerMotId">Supprimer un mot</string>
+    <string name="btnSupprimerToutMot">Supprimer tous les mots</string>
+
+    // Activity Supprimer Utilisateur
+    <string name="btnSupprimerAdmUtilisateur">Supprimer un utilisateur</string>
+    <string name="btnSupprimerAdmTouteUtilisateur">Supprimer tous les utilisateurs</string>
+    <string name="msg_utilisateur_supprime">Utilisateur supprimé</string>
+    <string name="msg_utilisateur_non_trouve">Utilisateur non trouvé</string>
+
+
 
 
 </resources>

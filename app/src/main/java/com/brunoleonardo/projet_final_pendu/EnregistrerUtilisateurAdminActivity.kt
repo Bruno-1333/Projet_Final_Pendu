@@ -13,6 +13,11 @@ class EnregistrerUtilisateurAdminActivity : AppCompatActivity() {
         binding = ActivityEnregistrerUtilisateurAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Definir o OnClickListener para o botão Voltar
+        binding.menuBack.setOnClickListener {
+            finish()
+        }
+
         val dbHandler = DBHandler(this)
 
         binding.btnEnregistrerAdmUtilisateur.setOnClickListener {
